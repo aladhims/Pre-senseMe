@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Presensi Geofence</string>
+    <string name="join_class">Ikuti Kelas Ini</string>
+    <string name="durasi_label">Durasi</string>
+    <string name="jam_label">Jam</string>
+    <string name="tanggal_picker_btn">Tanggal</string>
+    <string name="tanggal_picker_label">Tentukan Tanggal</string>
+    <string name="waktu_picker_label">Tentukan Jam</string>
+</resources>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_nama_matkul"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        tools:text="Algoritma dan Pemrograman 3"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_jadwal_ngajar"
+            android:drawableStart="@drawable/date_gambar"
+            android:gravity="center_vertical"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="Jumat, jam ke -1"/>
+
+        <TextView
+            android:id="@+id/tv_kelas_ngajar"
+            android:drawableStart="@drawable/sks_gambar"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="3IA09"/>
+
+        <TextView
+            android:id="@+id/tv_durasi_ngajar"
+            android:drawableStart="@drawable/time_gambar"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="2 Jam"/>
+    </LinearLayout>
+
+</LinearLayout>

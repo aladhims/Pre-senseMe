@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/foto_pengajar"
+        android:layout_gravity=""
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        tools:src="@drawable/photo"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:drawableStart="@drawable/contact_nama"
+            android:gravity="center"
+            android:id="@+id/nama_pengajar"
+            style="@style/Base.TextAppearance.AppCompat.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            tools:text="Alfian Dhimas Nur Marita"/>
+
+        <TextView
+            android:drawableStart="@drawable/contact_email"
+            android:gravity="center"
+            android:id="@+id/email_dosen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/nama_pengajar"
+            tools:text="alfiandnm@gmail.com"/>
+
+        <TextView
+            android:drawableStart="@drawable/contact_phone"
+            android:gravity="center"
+            android:id="@+id/tv_no_dosen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/email_dosen"
+            tools:text="085729494433"/>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

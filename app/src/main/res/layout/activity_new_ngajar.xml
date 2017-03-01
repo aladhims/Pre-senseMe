@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_new_ngajar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="win.aladhims.presensigeofence.NewNgajarActivity">
+
+
+    <EditText
+        android:id="@+id/et_nama_matkul"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="Nama Matkul"
+        android:maxLines="1"/>
+
+    <LinearLayout
+        android:id="@+id/durasi_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/et_nama_matkul"
+        android:orientation="horizontal"
+        android:layout_margin="16dp">
+
+        <EditText
+            android:drawableStart="@drawable/ic_class"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:hint="Kelas"
+            android:maxLines="1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/durasi_label"/>
+
+        <Spinner
+            android:id="@+id/spinner_durasi"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/jam_label"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/durasi_layout"
+        android:layout_margin="16dp">
+
+        <RelativeLayout
+            android:id="@+id/tanggal_layout"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_tanggal_picker_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tanggal_picker_label"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_tanggal_picker_label">
+
+                <TextView
+                    android:layout_gravity="center"
+                    android:id="@+id/tv_tanggal_picked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Jumat, 27/02/2017"/>
+
+                <Button
+                    android:layout_gravity="center"
+                    android:id="@+id/btn_tanggal_picker"
+                    android:background="@drawable/date_gambar"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginStart="16dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_waktu_picker_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/waktu_picker_label"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_waktu_picker_label">
+
+                <TextView
+                    android:layout_gravity="center"
+                    android:id="@+id/tv_waktu_picked"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="08.30 AM"/>
+
+                <Button
+                    android:layout_gravity="center"
+                    android:id="@+id/btn_waktu_picker"
+                    android:background="@drawable/time_gambar"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_tambah_ngajar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_navigation_check_24"/>
+
+</RelativeLayout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/foto_mahasiswa_presen"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/photo"
+        android:layout_marginEnd="8dp"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/nama_mahasiswa_presen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Alfian Dhimas Nur Marita"/>
+
+            <TextView
+                android:id="@+id/npm_mahasiswa_presen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="50414808" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/kelas_mahasiswa_presen"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                tools:text="3IA09"/>
+
+            <CheckBox
+                android:id="@+id/cb_validasi_presen"
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

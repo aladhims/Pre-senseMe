@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "104699768852",
+    "firebase_url": "https://presensigeofence.firebaseio.com",
+    "project_id": "presensigeofence",
+    "storage_bucket": "presensigeofence.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104699768852:android:14d1e0e0b2e41acd",
+        "android_client_info": {
+          "package_name": "win.aladhims.presensigeofence"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "104699768852-v647pihjl17l359l4g3e2d049mfht8ed.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "win.aladhims.presensigeofence",
+            "certificate_hash": "1ca4ffcf4c9c15d85d7b51fd48e53890ac6c55f7"
+          }
+        },
+        {
+          "client_id": "104699768852-m6ml9hl4g6td3h8bklst0jlia2eeli1n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxfUgOnCHidoVoTY4sJQXFC579oLSFPXg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "104699768852-m6ml9hl4g6td3h8bklst0jlia2eeli1n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

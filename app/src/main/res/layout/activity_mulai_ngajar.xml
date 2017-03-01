@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_mulai_ngajar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="win.aladhims.presensigeofence.MulaiNgajarActivity">
+
+
+
+    <TextView
+        android:id="@+id/tv_nama_matkul_mulai_ngajar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="26sp"
+        tools:text="Algoritma Pemrograman"/>
+
+    <LinearLayout
+        android:id="@+id/detail_matkul_terklik"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_nama_matkul_mulai_ngajar"
+        android:orientation="vertical"
+        android:layout_margin="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textAlignment="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="DURASI"
+                android:textSize="22sp"/>
+
+            <TextView
+                android:textAlignment="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:text="120"/>
+
+            <TextView
+                android:textAlignment="center"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:text="MENIT"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:padding="5dp"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/mahasiswa_presen_list_item"
+        android:layout_below="@+id/detail_matkul_terklik" />
+
+</RelativeLayout>
