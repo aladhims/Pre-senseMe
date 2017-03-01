@@ -6,13 +6,13 @@ package win.aladhims.presensigeofence.Model;
 
 public class Mahasiswa {
 
-    public String photoUrl,NPM, nama,kelas;
+    public String photoUrl,npm, nama,kelas;
 
     public Mahasiswa(){}
 
     public Mahasiswa(String PhotoUrl,String NPM, String Nama, String Kelas){
         this.photoUrl = PhotoUrl;
-        this.NPM = NPM;
+        this.npm = NPM;
         this.nama = Nama;
         this.kelas  = Kelas;
     }
@@ -26,15 +26,15 @@ public class Mahasiswa {
     }
 
     public String getNPM(){
-        return this.NPM;
+        return npm;
     }
 
     public void setNPM(String NPM){
-        this.NPM = NPM;
+        this.npm = NPM;
     }
 
     public String getNama(){
-        return this.nama;
+        return nama;
     }
 
     public void setNama(String nama){
@@ -42,7 +42,7 @@ public class Mahasiswa {
     }
 
     public String getKelas(){
-        return this.kelas;
+        return kelas;
     }
 
     public void setKelas(String Kelas){
