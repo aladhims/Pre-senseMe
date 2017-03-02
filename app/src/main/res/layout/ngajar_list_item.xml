@@ -83,7 +83,7 @@
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        tools:text="3 SKS"/>
+                        tools:text="3IA09"/>
 
                     <TextView
                         android:id="@+id/tv_durasi_ngajar"

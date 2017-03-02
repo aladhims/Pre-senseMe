@@ -11,9 +11,7 @@
         <activity android:name=".MatkulListActivity" />
         <activity android:name=".NewNgajarActivity" />
         <activity android:name=".MulaiNgajarActivity" />
-        <activity android:name=".EditProfilMahasiswa">
-
-        </activity>
+        <activity android:name=".EditProfilMahasiswa"></activity>
         <activity android:name=".PilihRoleActivity" />
         <activity android:name=".SignInMahasiswaActivity">
             <intent-filter>
@@ -22,6 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".EditProfilDosen"></activity>
     </application>
 
 </manifest>

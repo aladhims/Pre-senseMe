@@ -9,25 +9,43 @@ import java.util.Map;
 
 public class Dosen {
 
-    public String photoUrl,NIP,Nama,Email;
+    public String photoUrl,nip,nama,email;
 
     public Dosen(){}
 
     public Dosen(String PhotoUrl,String NIP,String Nama,String Email){
         this.photoUrl = PhotoUrl;
-        this.NIP = NIP;
-        this.Nama = Nama;
-        this.Email = Email;
+        this.nip = NIP;
+        this.nama = Nama;
+        this.email = Email;
     }
 
-    public Map<String, Object> toMap(){
+    public String getPhotoUrl(){
+        return photoUrl;
+    }
+    public void setPhotoUrl(String url){
+        this.photoUrl = url;
+    }
 
-        HashMap<String,Object> map = new HashMap<>();
-        map.put("photoURL",photoUrl);
-        map.put("NIP",NIP);
-        map.put("Nama",Nama);
-        map.put("Email",Email);
+    public String getNIP(){
+        return nip;
+    }
+    public void setNIP(String NIP){
+        this.nip = NIP;
+    }
 
-        return map;
+    public String getNama(){
+        return nama;
+    }
+    public void setNama(String nama){
+        this.nama = nama;
+    }
+
+    public String getEmail(){
+        return email;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
     }
 }

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_edit_profil_mahasiswa"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="win.aladhims.presensigeofence.EditProfilMahasiswa">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ci_foto_profil_dosen"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/photo"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+    <Button
+        android:layout_below="@+id/ci_foto_profil_dosen"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/btn_ganti_foto_dosen"
+        android:textColor="@android:color/white"
+        android:text="Ganti Foto"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorPrimary"
+        android:layout_width="wrap_content"
+        android:textSize="12sp"
+        android:layout_height="22dp" />
+
+    <EditText
+        android:layout_below="@+id/btn_ganti_foto_dosen"
+        android:id="@+id/et_edit_nip_dosen"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:drawableStart="@drawable/contact_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textCapCharacters"
+        android:hint="NIP anda"/>
+
+    <EditText
+        android:id="@+id/et_edit_nama_dosen"
+        android:layout_below="@+id/et_edit_nip_dosen"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:drawableStart="@drawable/contact_nama"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:maxLines="1"
+        android:hint="Nama anda"/>
+
+    <EditText
+        android:id="@+id/et_edit_email_dosen"
+        android:layout_below="@+id/et_edit_nama_dosen"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:drawableStart="@drawable/ic_class"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:hint="Email Anda"/>
+
+
+    <Button
+        android:id="@+id/btn_simpan_edit_dosen"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Simpan"/>
+</RelativeLayout>

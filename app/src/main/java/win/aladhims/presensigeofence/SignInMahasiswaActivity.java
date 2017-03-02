@@ -75,7 +75,7 @@ public class SignInMahasiswaActivity extends BaseActivity implements GoogleApiCl
                         if(!task.isSuccessful()){
                             Log.e(TAG,"error dengan credential");
                         } else {
-                            startActivity(new Intent(SignInMahasiswaActivity.this,EditProfilMahasiswa.class));
+                            startActivity(new Intent(SignInMahasiswaActivity.this,EditProfilDosen.class));
                             finish();
                         }
                     }

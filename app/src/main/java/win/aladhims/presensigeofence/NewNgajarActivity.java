@@ -58,7 +58,7 @@ public class NewNgajarActivity extends AppCompatActivity {
                 if(dosen == null){
 
                 } else{
-                    buatNgajarBaru(uid,dosen.NIP,dosen.Nama,dosen.photoUrl,dosen.Email);
+                    buatNgajarBaru(uid,dosen.getNIP(),dosen.getNama(),dosen.getPhotoUrl(),dosen.getEmail());
                 }
             }
 

@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -37,6 +38,8 @@ import win.aladhims.presensigeofence.Model.Mahasiswa;
 
 public class EditProfilMahasiswa extends BaseActivity implements View.OnClickListener{
 
+    private static final String TAG = EditProfilMahasiswa.class.getSimpleName();
+
     private static final int SELECT_PICT = 12;
     private static final String REQUIERED = "harus diisi";
 
@@ -46,7 +49,7 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
     private Button mUbahFotoBtn,mSimpanBtn;
     private EditText mEtNPMMahasiswa, mEtKelasMahasiswa,mEtNamaMahasiswa;
 
-    private View rootView;
+    private String mPhotoURL, mNPM, mNama, mKelas;
 
     private FirebaseUser mUser;
     private DatabaseReference baseRef;
@@ -57,36 +60,42 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profil_mahasiswa);
-
-        mCircleImage = (CircleImageView) findViewById(R.id.ci_foto_profil_mahasiswa);
         mUser = FirebaseAuth.getInstance().getCurrentUser();
-        Glide.with(this)
-                .load(mUser.getPhotoUrl())
-                .into(mCircleImage);
+        baseRef = FirebaseDatabase.getInstance().getReference();
+        mahasiswaRootRef = baseRef.child("users").child("mahasiswa");
+        mStorageRef = FirebaseStorage.getInstance().getReference().child("users").child("mahasiswa").child("profpict");
+        mCircleImage = (CircleImageView) findViewById(R.id.ci_foto_profil_mahasiswa);
         mUbahFotoBtn = (Button) findViewById(R.id.btn_ganti_foto_mahasiswa);
         mSimpanBtn = (Button) findViewById(R.id.btn_simpan_edit_mahasiswa);
         mEtNPMMahasiswa = (EditText) findViewById(R.id.et_edit_npm_mahasiswa);
         mEtNamaMahasiswa = (EditText) findViewById(R.id.et_edit_nama_mahasiswa);
-        mEtNamaMahasiswa.setText(mUser.getDisplayName());
         mEtKelasMahasiswa = (EditText) findViewById(R.id.et_edit_kelas_mahasiswa);
 
-        baseRef = FirebaseDatabase.getInstance().getReference().child("users");
-        mahasiswaRootRef = FirebaseDatabase.getInstance().getReference().child("users").child("mahasiswa");
-        mStorageRef = FirebaseStorage.getInstance().getReference().child("users").child("mahasiswa").child("profpict");
-        mahasiswaRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        showProgressDialog();
+        mahasiswaRootRef.child(getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(getUid())){
-                    Mahasiswa mahasiswa = dataSnapshot.getValue(Mahasiswa.class);
-                    if(mahasiswa.getPhotoUrl() != null) {
-                        Glide.with(getApplicationContext())
-                                .load(mahasiswa.getPhotoUrl())
-                                .into(mCircleImage);
+                Mahasiswa mahasiswa = dataSnapshot.getValue(Mahasiswa.class);
+                if(mahasiswa != null) {
+                    Log.d(TAG,"object mahasiswa ada!");
+                    mPhotoURL = mahasiswa.getPhotoUrl();
+                    mNPM = mahasiswa.getNPM();
+                    mNama = mahasiswa.getNama();
+                    mKelas = mahasiswa.getKelas();
+                }else{
+                    if(mUser.getPhotoUrl()!=null) {
+                        mPhotoURL = mUser.getPhotoUrl().toString();
                     }
-                    mEtNPMMahasiswa.setText(mahasiswa.getNPM());
-                    mEtNamaMahasiswa.setText(mahasiswa.getNama());
-                    mEtKelasMahasiswa.setText(mahasiswa.getKelas());
+                    mNPM = "";
+                    if(mUser.getDisplayName()!= null){
+                        mNama = mUser.getDisplayName();
+                    }else{
+                        mNama = "";
+                    }
+                    mKelas = "";
                 }
+                setTextForProfil(mPhotoURL,mNPM,mNama,mKelas);
+                hideProgressDialog();
             }
 
             @Override
@@ -97,6 +106,20 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
 
         mSimpanBtn.setOnClickListener(this);
         mUbahFotoBtn.setOnClickListener(this);
+
+
+
+    }
+
+
+    private void setTextForProfil(String urlPhoto, String NPM, String Nama, String Kelas){
+
+        Glide.with(this)
+                .load(urlPhoto)
+                .into(mCircleImage);
+        mEtNPMMahasiswa.setText(NPM);
+        mEtNamaMahasiswa.setText(Nama);
+        mEtKelasMahasiswa.setText(Kelas);
     }
 
 
@@ -155,7 +178,7 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
 
         Mahasiswa mahasiswa = new Mahasiswa(URLFoto,NPM,Nama,Kelas);
         Map<String,Object> update = new HashMap<>();
-        update.put("/mahasiswa/" + uid,mahasiswa);
+        update.put("/users/mahasiswa/" + uid,mahasiswa);
 
         baseRef.updateChildren(update)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

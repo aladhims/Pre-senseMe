@@ -19,13 +19,4 @@ public class Matkul {
         this.namaMatkul = Nama;
         this.SKS = SKS;
     }
-
-    public Map<String, Object> toMap(Dosen dosen){
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("Kode Matkul", kodeMatkul);
-        map.put("Nama Matkul", namaMatkul);
-        map.put("Dosen", dosen.NIP);
-
-        return map;
-    }
 }
