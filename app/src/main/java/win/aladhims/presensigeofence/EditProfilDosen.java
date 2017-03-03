@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,7 +50,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
     private StorageReference mStorageRef;
 
     private CircleImageView mCiFotoProfil;
-    private Button mBtnGantiFoto, mBtnSimpan;
+    private Button mBtnGantiFoto, mSkipOrCancelBtn;
     private EditText mEtNIP, mEtNama, mEtEmail;
 
 
@@ -64,7 +66,10 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
         mStorageRef = FirebaseStorage.getInstance().getReference().child("users").child("dosen").child("profpict");
         mCiFotoProfil = (CircleImageView) findViewById(R.id.ci_foto_profil_dosen);
         mBtnGantiFoto = (Button) findViewById(R.id.btn_ganti_foto_dosen);
-        mBtnSimpan = (Button) findViewById(R.id.btn_simpan_edit_dosen);
+        mSkipOrCancelBtn = (Button) findViewById(R.id.btn_skip_or_cancel_dosen);
+        Intent i = getIntent();
+        String txt = i.getStringExtra(BaseActivity.EXTRA_FROM);
+        mSkipOrCancelBtn.setText(txt);
         mEtNIP = (EditText) findViewById(R.id.et_edit_nip_dosen);
         mEtNama = (EditText) findViewById(R.id.et_edit_nama_dosen);
         mEtEmail = (EditText) findViewById(R.id.et_edit_email_dosen);
@@ -107,7 +112,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
         });
 
         mBtnGantiFoto.setOnClickListener(this);
-        mBtnSimpan.setOnClickListener(this);
+        mSkipOrCancelBtn.setOnClickListener(this);
     }
 
     private void setTextFor(String fotoURL,String nip,String nama, String email){
@@ -129,7 +134,6 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
         final String mNIP = mEtNIP.getText().toString().trim();
         final String mNama = mEtNama.getText().toString();
         final String mEmail = mEtEmail.getText().toString().trim();
-        final String defPhotoURL = mUser.getPhotoUrl().toString();
 
         if(TextUtils.isEmpty(mNIP)){
             mEtNIP.setError(REQUIERED);
@@ -157,7 +161,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
                         }
                     });
         } else {
-            updateProfilDosen(getUid(),defPhotoURL,mNIP,mNama,mEmail);
+            updateProfilDosen(getUid(),null,mNIP,mNama,mEmail);
         }
         setEnabled(true);
     }
@@ -180,10 +184,14 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
 
     private void setEnabled(boolean b){
         mBtnGantiFoto.setEnabled(b);
-        mBtnSimpan.setEnabled(b);
+        mSkipOrCancelBtn.setEnabled(b);
         mEtNIP.setEnabled(b);
         mEtNama.setEnabled(b);
         mEtEmail.setEnabled(b);
+    }
+
+    private void skipOrCancel(){
+
     }
 
     @Override
@@ -211,9 +219,25 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
             case R.id.btn_ganti_foto_dosen:
                 changeProfPict();
                 break;
-            case R.id.btn_simpan_edit_dosen:
+            case R.id.btn_skip_or_cancel_dosen:
+                skipOrCancel();
+                break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.edit_profil_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_simpan_edit_dosen:
                 updateKeDatabase();
                 break;
         }
+        return super.onOptionsItemSelected(item);
     }
 }

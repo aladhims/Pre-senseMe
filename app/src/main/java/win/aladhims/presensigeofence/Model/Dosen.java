@@ -48,4 +48,5 @@ public class Dosen {
     public void setEmail(String email){
         this.email = email;
     }
+
 }

@@ -60,11 +60,10 @@
 
 
     <Button
-        android:id="@+id/btn_simpan_edit_mahasiswa"
+        android:id="@+id/btn_skip_or_cancel_mahasiswa"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Simpan"/>
+        android:layout_height="wrap_content" />
 </RelativeLayout>

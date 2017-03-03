@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -46,7 +48,7 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
     private Uri mImageData;
 
     private CircleImageView mCircleImage;
-    private Button mUbahFotoBtn,mSimpanBtn;
+    private Button mUbahFotoBtn,mSkipOrCancelBtn;
     private EditText mEtNPMMahasiswa, mEtKelasMahasiswa,mEtNamaMahasiswa;
 
     private String mPhotoURL, mNPM, mNama, mKelas;
@@ -66,7 +68,10 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
         mStorageRef = FirebaseStorage.getInstance().getReference().child("users").child("mahasiswa").child("profpict");
         mCircleImage = (CircleImageView) findViewById(R.id.ci_foto_profil_mahasiswa);
         mUbahFotoBtn = (Button) findViewById(R.id.btn_ganti_foto_mahasiswa);
-        mSimpanBtn = (Button) findViewById(R.id.btn_simpan_edit_mahasiswa);
+        mSkipOrCancelBtn = (Button) findViewById(R.id.btn_skip_or_cancel_mahasiswa);
+        Intent i = getIntent();
+        String txt = i.getStringExtra(BaseActivity.EXTRA_FROM);
+        mSkipOrCancelBtn.setText(txt);
         mEtNPMMahasiswa = (EditText) findViewById(R.id.et_edit_npm_mahasiswa);
         mEtNamaMahasiswa = (EditText) findViewById(R.id.et_edit_nama_mahasiswa);
         mEtKelasMahasiswa = (EditText) findViewById(R.id.et_edit_kelas_mahasiswa);
@@ -104,7 +109,7 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
             }
         });
 
-        mSimpanBtn.setOnClickListener(this);
+        mSkipOrCancelBtn.setOnClickListener(this);
         mUbahFotoBtn.setOnClickListener(this);
 
 
@@ -131,7 +136,7 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
 
     private void setEnabled(boolean b){
         mUbahFotoBtn.setEnabled(b);
-        mSimpanBtn.setEnabled(b);
+        mSkipOrCancelBtn.setEnabled(b);
         mEtNamaMahasiswa.setEnabled(b);
         mEtNPMMahasiswa.setEnabled(b);
         mEtKelasMahasiswa.setEnabled(b);
@@ -190,6 +195,10 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
                 });
     }
 
+    private void skipOrCancel(){
+
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -197,8 +206,8 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
             case R.id.btn_ganti_foto_mahasiswa:
                 changeProfPic();
                 break;
-            case R.id.btn_simpan_edit_mahasiswa:
-                updateKeDatabase();
+            case R.id.btn_skip_or_cancel_mahasiswa:
+                skipOrCancel();
                 break;
         }
     }
@@ -220,5 +229,21 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
                 Toast.makeText(getApplicationContext(),"batal mengubah foto",Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.edit_profil_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_simpan_edit_dosen:
+                updateKeDatabase();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

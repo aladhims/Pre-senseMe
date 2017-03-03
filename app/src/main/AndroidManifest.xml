@@ -12,8 +12,7 @@
         <activity android:name=".NewNgajarActivity" />
         <activity android:name=".MulaiNgajarActivity" />
         <activity android:name=".EditProfilMahasiswa"></activity>
-        <activity android:name=".PilihRoleActivity" />
-        <activity android:name=".SignInMahasiswaActivity">
+        <activity android:name=".SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -11,6 +11,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class BaseActivity extends AppCompatActivity {
 
+    public static final String EXTRA_FROM = "FROM";
+
     private ProgressDialog mProgressDialog;
 
     public void showProgressDialog() {
