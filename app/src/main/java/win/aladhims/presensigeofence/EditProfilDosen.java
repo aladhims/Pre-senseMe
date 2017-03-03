@@ -44,6 +44,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
     private String photoUrl,nip,nama,email;
     private Uri mImageData;
 
+    private FirebaseAuth mAuth;
     private FirebaseUser mUser;
     private DatabaseReference rootRef;
     private DatabaseReference dosenRef;
@@ -60,7 +61,8 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profil_dosen);
 
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
         rootRef = FirebaseDatabase.getInstance().getReference();
         dosenRef = rootRef.child("users").child("dosen");
         mStorageRef = FirebaseStorage.getInstance().getReference().child("users").child("dosen").child("profpict");
@@ -195,6 +197,12 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
         finish();
     }
 
+    private void signOut(){
+        mAuth.signOut();
+        startActivity(new Intent(this,SignInActivity.class));
+        finish();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -237,6 +245,9 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
         switch (item.getItemId()){
             case R.id.menu_simpan_edit_dosen:
                 updateKeDatabase();
+                break;
+            case R.id.menu_sign_out_dosen:
+                signOut();
                 break;
         }
         return super.onOptionsItemSelected(item);

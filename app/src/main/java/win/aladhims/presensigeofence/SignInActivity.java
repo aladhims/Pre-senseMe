@@ -28,6 +28,11 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class SignInActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
     public static final String FROM_SIGNIN = "SKIP";
@@ -40,6 +45,8 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
 
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mFirebaseAuth;
+    private DatabaseReference mDatabaseRef;
+
     private LinearLayout mLayoutRole,mlayoutLogin,mLayoutHorizontal;
     private RelativeLayout mLayoutBawah;
 
@@ -52,6 +59,8 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
 
         mLayoutRole = (LinearLayout) findViewById(R.id.layout_pilih_role);
         mlayoutLogin = (LinearLayout) findViewById(R.id.layout_login);
@@ -258,6 +267,45 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mFirebaseAuth.getCurrentUser() != null){
+            showProgressDialog();
+            mDatabaseRef.child("users").child("dosen").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.hasChild(getUid())){
+                        hideProgressDialog();
+                        startActivity(new Intent(SignInActivity.this,ListNgajarkuActivity.class));
+                        finish();
+                    }else{
+                        mDatabaseRef.child("users").child("mahasiswa").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.hasChild(getUid())){
+                                    hideProgressDialog();
+                                    //dummy intent
+                                    startActivity(new Intent(SignInActivity.this,EditProfilMahasiswa.class));
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

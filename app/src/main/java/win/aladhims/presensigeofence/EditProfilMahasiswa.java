@@ -54,6 +54,7 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
     private String mPhotoURL, mNPM, mNama, mKelas;
 
     private FirebaseUser mUser;
+    private FirebaseAuth mAuth;
     private DatabaseReference baseRef;
     private DatabaseReference mahasiswaRootRef;
     private StorageReference mStorageRef;
@@ -62,7 +63,9 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profil_mahasiswa);
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
         baseRef = FirebaseDatabase.getInstance().getReference();
         mahasiswaRootRef = baseRef.child("users").child("mahasiswa");
         mStorageRef = FirebaseStorage.getInstance().getReference().child("users").child("mahasiswa").child("profpict");
@@ -199,6 +202,12 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
 
     }
 
+    private void signOut(){
+        mAuth.signOut();
+        startActivity(new Intent(this,SignInActivity.class));
+        finish();
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -242,6 +251,9 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
         switch (item.getItemId()){
             case R.id.menu_simpan_edit_dosen:
                 updateKeDatabase();
+                break;
+            case R.id.menu_sign_out_dosen:
+                signOut();
                 break;
         }
         return super.onOptionsItemSelected(item);
