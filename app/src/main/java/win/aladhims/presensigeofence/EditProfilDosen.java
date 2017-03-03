@@ -191,7 +191,8 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
     }
 
     private void skipOrCancel(){
-
+        startActivity(new Intent(this,ListNgajarkuActivity.class));
+        finish();
     }
 
     @Override

@@ -20,12 +20,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Calendar;
 
 import win.aladhims.presensigeofence.Model.Dosen;
+import win.aladhims.presensigeofence.Model.Ngajar;
 
-public class NewNgajarActivity extends AppCompatActivity {
+public class NewNgajarActivity extends BaseActivity {
 
     private static final String TAG = NewNgajarActivity.class.getSimpleName();
     private static final String REQUIERED = "Harus diisi";
     private static final String DOSEN_CHILD = "dosen";
+
+    private static final String dummyKontak = "085726494433";
 
     private DatabaseReference rootRef;
 
@@ -38,7 +41,7 @@ public class NewNgajarActivity extends AppCompatActivity {
 
         rootRef = FirebaseDatabase.getInstance().getReference();
 
-        mTambahNgajar = (FloatingActionButton) findViewById(R.id.fab_tambah_ngajar);
+        mTambahNgajar = (FloatingActionButton) findViewById(R.id.fab_konfirm_tambah_ngajar);
 
         mTambahNgajar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,16 +53,13 @@ public class NewNgajarActivity extends AppCompatActivity {
 
     public void tambahNgajar(){
         final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        rootRef.child(DOSEN_CHILD).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        rootRef.child("users").child(DOSEN_CHILD).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Dosen dosen = dataSnapshot.getValue(Dosen.class);
 
-                if(dosen == null){
-
-                } else{
-                    buatNgajarBaru(uid,dosen.getNIP(),dosen.getNama(),dosen.getPhotoUrl(),dosen.getEmail());
-                }
+                Ngajar n = new Ngajar(dosen.getPhotoUrl(),dosen.getNama(),dosen.getEmail(),dummyKontak,0,"Algoritma 1","08.30 AM","3IA09","2");
+                rootRef.child("dosen-ngajar").child(getUid()).push().setValue(n);
             }
 
             @Override
