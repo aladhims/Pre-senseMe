@@ -31,13 +31,14 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import win.aladhims.presensigeofence.Model.Dosen;
+import win.aladhims.presensigeofence.fragment.ListMahasiswaFragment;
 import win.aladhims.presensigeofence.fragment.ListNgajarFragment;
 
 
 public class MainWithDrawerActivity extends AppCompatActivity {
 
-    private static final String EXTRA_FROM_MAINDRAWER = "EXTRADRAWER";
-    private static final String VALUE_FROM_MAINDRAWER = "VALUEDRAWER";
+    public static final String EXTRA_FROM_MAINDRAWER = "EXTRADRAWER";
+    public static final String VALUE_FROM_MAINDRAWER = "VALUEDRAWER";
 
     private static int navItemIndex = 0;
 
@@ -158,7 +159,8 @@ public class MainWithDrawerActivity extends AppCompatActivity {
                 ListNgajarFragment listNgajar = new ListNgajarFragment();
                 return listNgajar;
             case 1:
-
+                ListMahasiswaFragment listMahasiswa = new ListMahasiswaFragment();
+                return listMahasiswa;
             case 2:
 
             case 3:
@@ -260,6 +262,9 @@ public class MainWithDrawerActivity extends AppCompatActivity {
             case 0:
                 getMenuInflater().inflate(R.menu.list_ngajarku_menu,menu);
                 return true;
+            case 1:
+                getMenuInflater().inflate(R.menu.menu_list_mahasiswa,menu);
+                return true;
         }
         return true;
     }
@@ -276,6 +281,11 @@ public class MainWithDrawerActivity extends AppCompatActivity {
                 Intent i = new Intent(this,EditProfilDosen.class);
                 i.putExtra(EXTRA_FROM_MAINDRAWER,VALUE_FROM_MAINDRAWER);
                 startActivity(i);
+                break;
+            case R.id.menu_sign_out_dosen_list_mahasiswa:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(this,SignInActivity.class));
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);

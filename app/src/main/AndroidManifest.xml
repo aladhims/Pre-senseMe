@@ -13,19 +13,18 @@
         <activity android:name=".MulaiNgajarActivity" />
         <activity android:name=".EditProfilMahasiswa" />
         <activity android:name=".SignInActivity">
-
-        </activity>
-        <activity
-            android:name=".EditProfilDosen"
-            android:parentActivityName=".ListNgajarkuActivity" />
-        <activity android:name=".ListNgajarkuActivity" />
-        <activity android:name=".MainWithDrawerActivity"
-            android:theme="@style/NoBarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".EditProfilDosen"
+            android:parentActivityName=".MainWithDrawerActivity" />
+        <activity android:name=".MainWithDrawerActivity"
+            android:theme="@style/NoBarTheme">
+
         </activity>
     </application>
 

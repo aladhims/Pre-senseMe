@@ -70,8 +70,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
         mBtnGantiFoto = (Button) findViewById(R.id.btn_ganti_foto_dosen);
         mSkipOrCancelBtn = (Button) findViewById(R.id.btn_skip_or_cancel_dosen);
         Intent i = getIntent();
-        String txt = i.getStringExtra(BaseActivity.EXTRA_FROM);
-        if(i.getStringExtra(ListNgajarkuActivity.EXTRA_FROM_LISTNGAJARKU) != null){
+        if(i.getStringExtra(MainWithDrawerActivity.EXTRA_FROM_MAINDRAWER) != null){
             mSkipOrCancelBtn.setText("CANCEL");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }else if(i.getStringExtra(BaseActivity.EXTRA_FROM) != null){
@@ -190,7 +189,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
                         hideProgressDialog();
                         setEnabled(true);
                         Toast.makeText(getApplicationContext(),"Update profil berhasil!",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(EditProfilDosen.this,ListNgajarkuActivity.class));
+                        startActivity(new Intent(EditProfilDosen.this,MainWithDrawerActivity.class));
                         finish();
                     }
                 });
@@ -205,7 +204,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
     }
 
     private void skipOrCancel(){
-        startActivity(new Intent(this,ListNgajarkuActivity.class));
+        startActivity(new Intent(this,MainWithDrawerActivity.class));
         finish();
     }
 

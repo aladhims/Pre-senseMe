@@ -277,7 +277,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.hasChild(getUid())){
                         hideProgressDialog();
-                        startActivity(new Intent(SignInActivity.this,ListNgajarkuActivity.class));
+                        startActivity(new Intent(SignInActivity.this,MainWithDrawerActivity.class));
                         finish();
                     }else{
                         mDatabaseRef.child("users").child("mahasiswa").addListenerForSingleValueEvent(new ValueEventListener() {

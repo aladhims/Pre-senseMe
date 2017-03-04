@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +16,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,7 +39,7 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 import win.aladhims.presensigeofence.Model.Mahasiswa;
 
-public class EditProfilMahasiswa extends BaseActivity implements View.OnClickListener{
+public class EditProfilMahasiswa extends BaseActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener{
 
     private static final String TAG = EditProfilMahasiswa.class.getSimpleName();
 
@@ -50,6 +54,7 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
 
     private String mPhotoURL, mNPM, mNama, mKelas;
 
+    private GoogleApiClient mGoogleApiClient;
     private FirebaseUser mUser;
     private FirebaseAuth mAuth;
     private DatabaseReference baseRef;
@@ -60,6 +65,11 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profil_mahasiswa);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this,this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API)
+                .build();
 
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
@@ -201,6 +211,7 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
 
     private void signOut(){
         mAuth.signOut();
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
         startActivity(new Intent(this,SignInActivity.class));
         finish();
     }
@@ -254,5 +265,10 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }
