@@ -3,28 +3,31 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/menu_drawer_list_ngajarku"
             android:icon="@drawable/contact_nama"
-            android:title="@string/nav_home" />
+            android:title="List Ngajar" />
         <item
-            android:id="@+id/nav_photos"
+            android:id="@+id/menu_drawer_list_mahasiswa"
             android:icon="@drawable/sks_gambar"
-            android:title="@string/nav_photos" />
+            android:title="List Mahasiswa" />
         <item
-            android:id="@+id/nav_movies"
+            android:id="@+id/menu_drawer_list_dosen"
             android:icon="@drawable/date_gambar"
-            android:title="@string/nav_movies" />
+            android:title="List Dosen" />
+
+        <item
+            android:id="@+id/menu_drawer_timeline"
+            android:icon="@drawable/time_gambar"
+            android:title="Timeline"/>
 
     </group>
 
     <item android:title="Other">
         <menu>
             <item
-                android:id="@+id/nav_about_us"
-                android:title="@string/nav_about_us" />
-            <item
-                android:id="@+id/nav_privacy_policy"
-                android:title="@string/privacy_policy" />
+                android:id="@+id/menu_the_creator"
+                android:title="Creator" />
+
         </menu>
     </item>
 
