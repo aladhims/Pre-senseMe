@@ -7,7 +7,7 @@
         android:title="Save"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/menu_sign_out_dosen"
+        android:id="@+id/menu_sign_out_dosen_edit_profil"
         android:title="Sign Out"
         app:showAsAction="never"/>
 </menu>

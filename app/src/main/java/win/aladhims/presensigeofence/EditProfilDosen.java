@@ -29,11 +29,11 @@ import com.google.firebase.storage.UploadTask;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import win.aladhims.presensigeofence.Model.Dosen;
-import win.aladhims.presensigeofence.Model.Mahasiswa;
 
 public class EditProfilDosen extends BaseActivity implements View.OnClickListener {
 
@@ -71,10 +71,19 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
         mSkipOrCancelBtn = (Button) findViewById(R.id.btn_skip_or_cancel_dosen);
         Intent i = getIntent();
         String txt = i.getStringExtra(BaseActivity.EXTRA_FROM);
-        mSkipOrCancelBtn.setText(txt);
+        if(i.getStringExtra(ListNgajarkuActivity.EXTRA_FROM_LISTNGAJARKU) != null){
+            mSkipOrCancelBtn.setText("CANCEL");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }else if(i.getStringExtra(BaseActivity.EXTRA_FROM) != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            mSkipOrCancelBtn.setVisibility(View.GONE);
+        }
+
         mEtNIP = (EditText) findViewById(R.id.et_edit_nip_dosen);
         mEtNama = (EditText) findViewById(R.id.et_edit_nama_dosen);
         mEtEmail = (EditText) findViewById(R.id.et_edit_email_dosen);
+
+
 
         showProgressDialog();
         dosenRef.child(getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -165,7 +174,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
         } else {
             updateProfilDosen(getUid(),null,mNIP,mNama,mEmail);
         }
-        setEnabled(true);
+
     }
 
     public void updateProfilDosen(String uid, String URLFoto, String NIP, String Nama, String Email){
@@ -179,7 +188,10 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
                     @Override
                     public void onSuccess(Void aVoid) {
                         hideProgressDialog();
+                        setEnabled(true);
                         Toast.makeText(getApplicationContext(),"Update profil berhasil!",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(EditProfilDosen.this,ListNgajarkuActivity.class));
+                        finish();
                     }
                 });
     }
@@ -246,7 +258,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
             case R.id.menu_simpan_edit_dosen:
                 updateKeDatabase();
                 break;
-            case R.id.menu_sign_out_dosen:
+            case R.id.menu_sign_out_dosen_edit_profil:
                 signOut();
                 break;
         }

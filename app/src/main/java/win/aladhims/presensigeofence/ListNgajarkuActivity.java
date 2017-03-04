@@ -6,10 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -19,6 +22,8 @@ import win.aladhims.presensigeofence.ViewHolder.ListNgajarkuViewHolder;
 public class ListNgajarkuActivity extends BaseActivity {
 
     private static final String TAG = ListNgajarkuActivity.class.getSimpleName();
+    public static final String EXTRA_FROM_LISTNGAJARKU = "LISTNGAJARKU";
+    public static final String VALUE_FROM_LISTNGAJARKU = "VALLISTNGAJARRKU";
 
     private DatabaseReference mDatabaseReference;
     private FirebaseRecyclerAdapter<Ngajar,ListNgajarkuViewHolder> mAdapter;
@@ -78,5 +83,29 @@ public class ListNgajarkuActivity extends BaseActivity {
         if(mAdapter != null){
             mAdapter.cleanup();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.list_ngajarku_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_sign_out_dosen_list_ngajarku:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(ListNgajarkuActivity.this,SignInActivity.class));
+                finish();
+                break;
+            case R.id.menu_to_edit_profil_dosen_list_ngajarku:
+                Intent i = new Intent(ListNgajarkuActivity.this,EditProfilDosen.class);
+                i.putExtra(EXTRA_FROM_LISTNGAJARKU,VALUE_FROM_LISTNGAJARKU);
+                startActivity(i);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

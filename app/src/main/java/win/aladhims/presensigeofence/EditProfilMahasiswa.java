@@ -4,15 +4,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -252,7 +249,7 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
             case R.id.menu_simpan_edit_dosen:
                 updateKeDatabase();
                 break;
-            case R.id.menu_sign_out_dosen:
+            case R.id.menu_sign_out_dosen_edit_profil:
                 signOut();
                 break;
         }

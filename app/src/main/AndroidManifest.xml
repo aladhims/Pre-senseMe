@@ -19,7 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditProfilDosen" />
+        <activity
+            android:name=".EditProfilDosen"
+            android:parentActivityName=".ListNgajarkuActivity"/>
         <activity android:name=".ListNgajarkuActivity"></activity>
     </application>
 
