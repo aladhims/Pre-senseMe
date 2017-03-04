@@ -21,8 +21,9 @@
         </activity>
         <activity
             android:name=".EditProfilDosen"
-            android:parentActivityName=".ListNgajarkuActivity"/>
-        <activity android:name=".ListNgajarkuActivity"></activity>
+            android:parentActivityName=".ListNgajarkuActivity" />
+        <activity android:name=".ListNgajarkuActivity" />
+        <activity android:name=".MainWithDrawerActivity"></activity>
     </application>
 
 </manifest>
