@@ -54,14 +54,14 @@
         android:hint="Nama anda"/>
 
     <EditText
-        android:id="@+id/et_edit_email_dosen"
+        android:id="@+id/et_edit_nope_dosen"
         android:layout_below="@+id/et_edit_nama_dosen"
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:drawableStart="@drawable/ic_class"
+        android:drawableStart="@drawable/contact_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:hint="Email Anda"/>
+        tools:hint="Nomor Telefon Anda"/>
 
 
     <Button

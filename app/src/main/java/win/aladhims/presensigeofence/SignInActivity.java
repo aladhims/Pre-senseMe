@@ -34,6 +34,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import win.aladhims.presensigeofence.Model.Dosen;
+
 public class SignInActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
     public static final String FROM_SIGNIN = "SKIP";
     private static final int RC_SIGN_IN_GOOGLE = 1111;
@@ -182,13 +184,29 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            hideProgressDialog();
                             switch (type) {
                                 case DOSEN_TYPE:
-                                    Intent i = new Intent(SignInActivity.this, EditProfilDosen.class);
-                                    i.putExtra(BaseActivity.EXTRA_FROM, FROM_SIGNIN);
-                                    startActivity(i);
-                                    finish();
+                                    mDatabaseRef.child("users").child("dosen").child(getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            Dosen dosen = dataSnapshot.getValue(Dosen.class);
+                                            if(dosen != null){
+                                                startActivity(new Intent(SignInActivity.this,MainWithDrawerActivity.class));
+                                                finish();
+                                            }else{
+                                                Intent i = new Intent(SignInActivity.this, EditProfilDosen.class);
+                                                i.putExtra(BaseActivity.EXTRA_FROM, FROM_SIGNIN);
+                                                startActivity(i);
+                                                finish();
+
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
                                     break;
                                 case MAHASISWA_TYPE:
                                     Intent a = new Intent(SignInActivity.this, EditProfilMahasiswa.class);

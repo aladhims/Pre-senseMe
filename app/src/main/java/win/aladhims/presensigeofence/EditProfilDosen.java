@@ -29,7 +29,6 @@ import com.google.firebase.storage.UploadTask;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -41,7 +40,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
     private static final String REQUIERED = "harus diisi";
     private static final int RC_PICK_FOTO = 112;
 
-    private String photoUrl,nip,nama,email;
+    private String photoUrl,nip,nama,nope;
     private Uri mImageData;
 
     private FirebaseAuth mAuth;
@@ -52,7 +51,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
 
     private CircleImageView mCiFotoProfil;
     private Button mBtnGantiFoto, mSkipOrCancelBtn;
-    private EditText mEtNIP, mEtNama, mEtEmail;
+    private EditText mEtNIP, mEtNama, mEtNope;
 
 
 
@@ -80,7 +79,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
 
         mEtNIP = (EditText) findViewById(R.id.et_edit_nip_dosen);
         mEtNama = (EditText) findViewById(R.id.et_edit_nama_dosen);
-        mEtEmail = (EditText) findViewById(R.id.et_edit_email_dosen);
+        mEtNope = (EditText) findViewById(R.id.et_edit_nope_dosen);
 
 
 
@@ -93,7 +92,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
                     photoUrl = dosen.getPhotoUrl();
                     nip = dosen.getNIP();
                     nama = dosen.getNama();
-                    email = dosen.getEmail();
+                    nope = dosen.getNohape();
                 }else {
                     if(mUser.getPhotoUrl() != null){
                         photoUrl = mUser.getPhotoUrl().toString();
@@ -104,14 +103,12 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
                         nama = mUser.getDisplayName();
                     }else{
                         nama = "";
-                    }if(mUser.getEmail() != null){
-                        email = mUser.getEmail();
-                    }else{
-                        email = "";
                     }
+
+                    nope = "";
                     nip = "";
                 }
-                setTextFor(photoUrl,nip,nama,email);
+                setValueFor(photoUrl,nip,nama,nope);
                 hideProgressDialog();
             }
 
@@ -125,13 +122,13 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
         mSkipOrCancelBtn.setOnClickListener(this);
     }
 
-    private void setTextFor(String fotoURL,String nip,String nama, String email){
+    private void setValueFor(String fotoURL, String nip, String nama, String email){
         Glide.with(getApplicationContext())
                 .load(fotoURL)
                 .into(mCiFotoProfil);
         mEtNIP.setText(nip);
         mEtNama.setText(nama);
-        mEtEmail.setText(email);
+        mEtNope.setText(email);
     }
 
     private void changeProfPict(){
@@ -143,7 +140,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
     private void updateKeDatabase(){
         final String mNIP = mEtNIP.getText().toString().trim();
         final String mNama = mEtNama.getText().toString();
-        final String mEmail = mEtEmail.getText().toString().trim();
+        final String mNope = mEtNope.getText().toString().trim();
 
         if(TextUtils.isEmpty(mNIP)){
             mEtNIP.setError(REQUIERED);
@@ -153,8 +150,8 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
             mEtNama.setError(REQUIERED);
             return;
         }
-        if(TextUtils.isEmpty(mEmail)){
-            mEtEmail.setError(REQUIERED);
+        if(TextUtils.isEmpty(mNope)){
+            mEtNope.setError(REQUIERED);
             return;
         }
 
@@ -166,19 +163,19 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Uri urlFoto = taskSnapshot.getDownloadUrl();
-                            updateProfilDosen(getUid(),urlFoto.toString(),mNIP,mNama,mEmail);
+                            updateProfilDosen(getUid(),urlFoto.toString(),mNIP,mNama,mNope);
 
                         }
                     });
         } else {
-            updateProfilDosen(getUid(),null,mNIP,mNama,mEmail);
+            updateProfilDosen(getUid(),null,mNIP,mNama,mNope);
         }
 
     }
 
-    public void updateProfilDosen(String uid, String URLFoto, String NIP, String Nama, String Email){
+    public void updateProfilDosen(String uid, String URLFoto, String NIP, String Nama, String NoHape){
 
-        Dosen dosen = new Dosen(URLFoto,NIP,Nama,Email);
+        Dosen dosen = new Dosen(URLFoto,NIP,Nama,mUser.getEmail(),NoHape);
         Map<String,Object> update = new HashMap<>();
         update.put("/users/dosen/" + uid,dosen);
 
@@ -200,7 +197,7 @@ public class EditProfilDosen extends BaseActivity implements View.OnClickListene
         mSkipOrCancelBtn.setEnabled(b);
         mEtNIP.setEnabled(b);
         mEtNama.setEnabled(b);
-        mEtEmail.setEnabled(b);
+        mEtNope.setEnabled(b);
     }
 
     private void skipOrCancel(){

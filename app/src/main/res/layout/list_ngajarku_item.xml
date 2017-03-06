@@ -70,7 +70,7 @@
                     android:id="@+id/tv_jadwal_ngajar_list_ngajarku"
                     android:drawableStart="@drawable/date_gambar"
                     android:gravity="center_vertical"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     tools:text="Jumat, jam ke -1"/>

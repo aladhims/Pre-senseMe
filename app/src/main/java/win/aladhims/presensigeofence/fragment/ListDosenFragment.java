@@ -15,18 +15,23 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import win.aladhims.presensigeofence.Model.Dosen;
 import win.aladhims.presensigeofence.Model.Mahasiswa;
 import win.aladhims.presensigeofence.R;
+import win.aladhims.presensigeofence.ViewHolder.ListDosenViewHolder;
 import win.aladhims.presensigeofence.ViewHolder.ListMahasiswaViewHolder;
 
+/**
+ * Created by Aladhims on 05/03/2017.
+ */
 
-public class ListMahasiswaFragment extends Fragment {
+public class ListDosenFragment extends Fragment {
 
     private DatabaseReference mDatabaseReference;
-    private FirebaseRecyclerAdapter<Mahasiswa,ListMahasiswaViewHolder> mAdapter;
+    private FirebaseRecyclerAdapter<Dosen,ListDosenViewHolder> mAdapter;
     private RecyclerView mRecyclerView;
 
-    public ListMahasiswaFragment() {
+    public ListDosenFragment() {
         // Required empty public constructor
     }
 
@@ -41,10 +46,10 @@ public class ListMahasiswaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.list_mahasiswa,container,false);
+        View rootView = inflater.inflate(R.layout.list_dosen,container,false);
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child("mahasiswa");
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_list_mahasiswa);
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child("dosen");
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_list_dosen);
 
 
 
@@ -53,17 +58,16 @@ public class ListMahasiswaFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(lm);
 
-        mAdapter = new FirebaseRecyclerAdapter<Mahasiswa, ListMahasiswaViewHolder>
-                (Mahasiswa.class,R.layout.list_mahasiswa_item,ListMahasiswaViewHolder.class,mDatabaseReference) {
+        mAdapter = new FirebaseRecyclerAdapter<Dosen, ListDosenViewHolder>
+                (Dosen.class,R.layout.list_dosen_item,ListDosenViewHolder.class,mDatabaseReference) {
             @Override
-            protected void populateViewHolder(ListMahasiswaViewHolder viewHolder, Mahasiswa model, int position) {
+            protected void populateViewHolder(ListDosenViewHolder viewHolder, Dosen dosen, int position) {
 
                 Glide.with(getActivity())
-                        .load(model.getPhotoUrl())
-                        .into(viewHolder.mCiMahasiswa);
-                viewHolder.mTvNamaMahasiswa.setText(model.getNama());
-                viewHolder.mTvNPMMahasiswa.setText(model.getNPM());
-                viewHolder.mTvKelasMahasiswa.setText(model.getKelas());
+                        .load(dosen.getPhotoUrl())
+                        .into(viewHolder.mCiFotoDosen);
+                viewHolder.mTvNamaDosen.setText(dosen.getNama());
+                viewHolder.mTvNIPDosen.setText(dosen.getNIP());
             }
         };
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),

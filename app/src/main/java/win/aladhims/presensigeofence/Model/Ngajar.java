@@ -11,10 +11,34 @@ public class Ngajar {
     String emailDosen;
     String kontakDosen;
     String namaMatkul;
-    String waktu;
+    String hari;
     String kelasDiajar;
-    String durasiNgajar;
-    int jumlahStar;
+    int durasiNgajar;
+    int jumlahStar,jam,menit;
+
+    public String getHari() {
+        return hari;
+    }
+
+    public int getJam() {
+        return jam;
+    }
+
+    public int getMenit() {
+        return menit;
+    }
+
+    public void setHari(String hari) {
+        this.hari = hari;
+    }
+
+    public void setJam(int jam) {
+        this.jam = jam;
+    }
+
+    public void setMenit(int menit) {
+        this.menit = menit;
+    }
 
     public String getNamaDosen() {
         return namaDosen;
@@ -52,15 +76,11 @@ public class Ngajar {
         this.namaMatkul = namaMatkul;
     }
 
-    public void setWaktu(String waktu) {
-        this.waktu = waktu;
-    }
-
     public void setKelasDiajar(String kelasDiajar) {
         this.kelasDiajar = kelasDiajar;
     }
 
-    public void setDurasiNgajar(String durasiNgajar) {
+    public void setDurasiNgajar(int durasiNgajar) {
         this.durasiNgajar = durasiNgajar;
     }
 
@@ -78,15 +98,11 @@ public class Ngajar {
         return namaMatkul;
     }
 
-    public String getWaktu() {
-        return waktu;
-    }
-
     public String getKelasDiajar() {
         return kelasDiajar;
     }
 
-    public String getDurasiNgajar() {
+    public int getDurasiNgajar() {
         return durasiNgajar;
     }
 
@@ -94,13 +110,15 @@ public class Ngajar {
 
     public Ngajar(){}
 
-    public Ngajar(String photoURLDosen,String namaDosen,String emailDosen,String kontakDosen,int jumlahStar,String namaMatkul,String waktu,String kelasDiajar,String durasiNgajar){
+    public Ngajar(String photoURLDosen,String namaDosen,String emailDosen,String kontakDosen,int jumlahStar,String namaMatkul,String hari,int jam,int menit,String kelasDiajar,int durasiNgajar){
         this.namaDosen = namaDosen;
         this.emailDosen = emailDosen;
         this.kontakDosen = kontakDosen;
         this.namaMatkul = namaMatkul;
         this.jumlahStar = jumlahStar;
-        this.waktu = waktu;
+        this.hari = hari;
+        this.jam = jam;
+        this.menit = menit;
         this.kelasDiajar = kelasDiajar;
         this.durasiNgajar = durasiNgajar;
         this.photoURLDosen = photoURLDosen;

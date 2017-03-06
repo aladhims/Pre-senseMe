@@ -12,7 +12,7 @@
     <string name="openDrawer">open_drawer</string>
     <string name="closeDrawer">close_drawer</string>
 
-    <!-- Navigation Drawer menu labels -->
+
     <string name="nav_home">Home</string>
     <string name="nav_photos">Photos</string>
     <string name="nav_movies">Movies</string>
@@ -20,13 +20,28 @@
     <string name="nav_settings">Settings</string>
     <string name="nav_about_us">About Us</string>
 
-    <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles_dosen">
         <item>List Ngajarku</item>
         <item>List Mahasiswa</item>
         <item>List Dosen</item>
         <item>Timeline</item>
         <item>Creator</item>
+    </string-array>
+
+    <string-array name="hari_array">
+        <item>Senin</item>
+        <item>Selasa</item>
+        <item>Rabu</item>
+        <item>Kamis</item>
+        <item>April</item>
+        <item>Jumat</item>
+        <item>Sabtu</item>
+    </string-array>
+
+    <string-array name="durasi_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string name="activity_title_about_us">About Us</string>

@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,15 +25,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import win.aladhims.presensigeofence.Model.Dosen;
+import win.aladhims.presensigeofence.fragment.ListDosenFragment;
 import win.aladhims.presensigeofence.fragment.ListMahasiswaFragment;
-import win.aladhims.presensigeofence.fragment.ListNgajarFragment;
+import win.aladhims.presensigeofence.fragment.ListNgajarKuFragment;
 
 
-public class MainWithDrawerActivity extends AppCompatActivity {
+public class MainWithDrawerActivity extends BaseActivity {
 
     public static final String EXTRA_FROM_MAINDRAWER = "EXTRADRAWER";
     public static final String VALUE_FROM_MAINDRAWER = "VALUEDRAWER";
@@ -125,7 +122,7 @@ public class MainWithDrawerActivity extends AppCompatActivity {
         if(getSupportFragmentManager().findFragmentByTag(CURRENT_TAG)!=null){
             mDrawerLayout.closeDrawers();
 
-            toggleFab();
+
             return;
 
         }
@@ -146,7 +143,7 @@ public class MainWithDrawerActivity extends AppCompatActivity {
             mHandler.post(mPendingRunnable);
         }
 
-        toggleFab();
+
 
         mDrawerLayout.closeDrawers();
 
@@ -156,19 +153,20 @@ public class MainWithDrawerActivity extends AppCompatActivity {
     private Fragment getFragment(){
         switch (navItemIndex){
             case 0:
-                ListNgajarFragment listNgajar = new ListNgajarFragment();
+                ListNgajarKuFragment listNgajar = new ListNgajarKuFragment();
                 return listNgajar;
             case 1:
                 ListMahasiswaFragment listMahasiswa = new ListMahasiswaFragment();
                 return listMahasiswa;
             case 2:
-
+                ListDosenFragment listDosen = new ListDosenFragment();
+                return listDosen;
             case 3:
 
             case 4:
 
             default:
-                return new ListNgajarFragment();
+                return new ListNgajarKuFragment();
         }
     }
 
@@ -243,16 +241,6 @@ public class MainWithDrawerActivity extends AppCompatActivity {
         }
 
         super.onBackPressed();
-    }
-
-    private void toggleFab() {
-        if (navItemIndex == 0){
-
-        }
-        else{
-
-        }
-
     }
 
     @Override
