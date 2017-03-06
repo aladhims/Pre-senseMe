@@ -25,10 +25,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import win.aladhims.presensigeofence.Model.Dosen;
 import win.aladhims.presensigeofence.Model.Ngajar;
+import win.aladhims.presensigeofence.fragment.ListNgajarKuFragment;
 
 public class NewNgajarActivity extends BaseActivity implements View.OnClickListener,RadialTimePickerDialogFragment.OnTimeSetListener,AdapterView.OnItemSelectedListener {
 
@@ -41,6 +44,8 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
     private int mDurasi,mJamMulai,mMenitMulai;
 
     private DatabaseReference rootRef;
+    private String keyBawaan;
+    private String[] hariArray;
 
     private TextView mTvJamMulai;
     private EditText mEtNamaMatkul,mEtKelas;
@@ -54,7 +59,7 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
         setContentView(R.layout.activity_new_ngajar);
 
         rootRef = FirebaseDatabase.getInstance().getReference();
-
+        hariArray = getResources().getStringArray(R.array.hari_array);
         mTvJamMulai = (TextView) findViewById(R.id.tv_waktu_picked);
         mEtNamaMatkul = (EditText) findViewById(R.id.et_nama_matkul_new_ngajar);
         mEtKelas = (EditText) findViewById(R.id.et_kelas_new_ngajar);
@@ -63,9 +68,9 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
         mTambahNgajar = (FloatingActionButton) findViewById(R.id.fab_konfirm_tambah_ngajar);
         mBtnTimePicker = (Button) findViewById(R.id.btn_waktu_picker);
 
-        ArrayAdapter<CharSequence> hariAdapter = ArrayAdapter.createFromResource(this,R.array.hari_array,android.R.layout.simple_spinner_item);
+        final ArrayAdapter<CharSequence> hariAdapter = ArrayAdapter.createFromResource(this,R.array.hari_array,android.R.layout.simple_spinner_item);
         hariAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ArrayAdapter<CharSequence> durasiAdapter = ArrayAdapter.createFromResource(this,R.array.durasi_array,android.R.layout.simple_spinner_item);
+        final ArrayAdapter<Integer> durasiAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,new Integer[]{1,2,3});
         durasiAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         mSpinnerHari.setAdapter(hariAdapter);
@@ -74,6 +79,38 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
         mSpinnerDurasi.setOnItemSelectedListener(this);
         mTambahNgajar.setOnClickListener(this);
         mBtnTimePicker.setOnClickListener(this);
+
+        if(getIntent().hasExtra(ListNgajarKuFragment.EXTRA_KEY_LIST_NGAJARKU)){
+            keyBawaan = getIntent().getStringExtra(ListNgajarKuFragment.EXTRA_KEY_LIST_NGAJARKU);
+            rootRef.child("dosen-ngajar").child(getUid()).child(keyBawaan).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Ngajar ngajar = dataSnapshot.getValue(Ngajar.class);
+                    mEtNamaMatkul.setText(ngajar.getNamaMatkul());
+                    mEtKelas.setText(ngajar.getKelasDiajar());
+                    mJamMulai = ngajar.getJam();
+                    mMenitMulai = ngajar.getMenit();
+                    mTvJamMulai.setText(ngajar.getJam()+":"+ngajar.getMenit());
+                    mSpinnerHari.setSelection(checkPosisiHari(ngajar.getHari()));
+                    mSpinnerDurasi.setSelection(durasiAdapter.getPosition(ngajar.getDurasiNgajar()));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+    public int checkPosisiHari(String hari){
+
+        for(int i=0; i<hariArray.length;i++){
+            if (hari.equals(hariArray[i])){
+                return i;
+            }
+        }
+        return 0;
     }
 
     public void tambahNgajar(){
@@ -87,6 +124,10 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
                 Dosen dosen = dataSnapshot.getValue(Dosen.class);
 
                 String key = rootRef.child("dosen-ngajar").child(getUid()).push().getKey();
+                if(keyBawaan != null){
+                    key = keyBawaan;
+                }
+
                 Ngajar n = new Ngajar(dosen.getPhotoUrl(),dosen.getNama(),dosen.getEmail(),dosen.getNohape(),0,namaMatkul,mHari,mJamMulai,mMenitMulai,kelas,mDurasi);
                 rootRef.child("dosen-ngajar").child(getUid()).child(key).setValue(n);
                 rootRef.child("ngajar").child(key).setValue(n);
@@ -115,6 +156,9 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
                         .setForced24hFormat()
                         .setThemeLight()
                         .setTitleText("Pilih Waktu Mulai");
+                if(keyBawaan != null){
+                    radialTime.setStartTime(mJamMulai,mMenitMulai);
+                }
                 radialTime.show(getSupportFragmentManager(), RADIAL_PICKER_TAG);
         }
     }
@@ -141,25 +185,23 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
             Log.d(TAG,"Spinner hari :"+position);
             switch (position){
                 case 0:
-                    mHari = "Senin";
+                    mHari = hariArray[0];
                     break;
                 case 1:
-                    mHari = "Selasa";
+                    mHari = hariArray[1];
                     break;
                 case 2:
-                    mHari = "Rabu";
+                    mHari = hariArray[2];
                     break;
                 case 3:
-                    mHari = "Kamis";
+                    mHari = hariArray[3];
                     break;
                 case 4:
-                    mHari = "Jum'at";
+                    mHari = hariArray[4];
                     break;
                 case 5:
-                    mHari = "Sabtu";
+                    mHari = hariArray[5];
                     break;
-                default:
-                    mHari = "";
             }
         }else if(parent.getId() == R.id.spinner_durasi_new_ngajar){
             switch (position){

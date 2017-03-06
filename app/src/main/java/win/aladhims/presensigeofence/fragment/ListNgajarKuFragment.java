@@ -6,8 +6,12 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -30,6 +34,7 @@ public class ListNgajarKuFragment extends Fragment {
         // Required empty public constructor
     }
     private static final String TAG = ListNgajarKuFragment.class.getSimpleName();
+    public static final String EXTRA_KEY_LIST_NGAJARKU = "NGAJARKU";
 
     private DatabaseReference mDatabaseReference;
     private FirebaseRecyclerAdapter<Ngajar,ListNgajarkuViewHolder> mAdapter;
@@ -61,7 +66,7 @@ public class ListNgajarKuFragment extends Fragment {
         mAdapter = new FirebaseRecyclerAdapter<Ngajar, ListNgajarkuViewHolder>
                 (Ngajar.class,R.layout.list_ngajarku_item,ListNgajarkuViewHolder.class,mDatabaseReference) {
             @Override
-            protected void populateViewHolder(ListNgajarkuViewHolder viewHolder, Ngajar model, int position) {
+            protected void populateViewHolder(final ListNgajarkuViewHolder viewHolder, Ngajar model, int position) {
                 final DatabaseReference ngajarRef = getRef(position);
 
                 final String key = ngajarRef.getKey();
@@ -80,6 +85,12 @@ public class ListNgajarKuFragment extends Fragment {
                 viewHolder.mTvWaktu.setText(model.getHari()+", "+model.getJam()+":"+model.getMenit());
                 viewHolder.mTvKelas.setText(model.getKelasDiajar());
                 viewHolder.mTvDurasi.setText(model.getDurasiNgajar()+" Jam");
+                viewHolder.dotsOverflow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showPopUpMenu(viewHolder.dotsOverflow, key);
+                    }
+                });
             }
         };
 
@@ -93,6 +104,14 @@ public class ListNgajarKuFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    public void showPopUpMenu(View view, String key){
+        PopupMenu popupMenu = new PopupMenu(getActivity(),view);
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.overflow_menu,popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new listNgajarMenuClickListener(key));
+        popupMenu.show();
     }
 
 
@@ -110,5 +129,27 @@ public class ListNgajarKuFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    class listNgajarMenuClickListener implements PopupMenu.OnMenuItemClickListener{
+
+        String rootRef;
+
+        public listNgajarMenuClickListener(String key){
+            rootRef = key;
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()){
+                case R.id.edit_ngajar_ini:
+                    Intent i = new Intent(getActivity(),NewNgajarActivity.class);
+                    i.putExtra(ListNgajarKuFragment.EXTRA_KEY_LIST_NGAJARKU,rootRef);
+                    startActivity(i);
+                    return true;
+                default:
+                    return true;
+            }
+        }
     }
 }

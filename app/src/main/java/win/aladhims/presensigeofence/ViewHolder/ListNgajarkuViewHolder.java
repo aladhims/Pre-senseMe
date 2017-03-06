@@ -1,7 +1,9 @@
 package win.aladhims.presensigeofence.ViewHolder;
 
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -16,6 +18,7 @@ import win.aladhims.presensigeofence.R;
 public class ListNgajarkuViewHolder extends RecyclerView.ViewHolder {
 
     public TextView mTvNamaMatkul,mTvNumsStar,mTvWaktu,mTvKelas,mTvDurasi;
+    public ImageView dotsOverflow;
 
     public ListNgajarkuViewHolder(View itemView) {
         super(itemView);
@@ -24,6 +27,7 @@ public class ListNgajarkuViewHolder extends RecyclerView.ViewHolder {
         mTvWaktu = (TextView) itemView.findViewById(R.id.tv_jadwal_ngajar_list_ngajarku);
         mTvKelas = (TextView) itemView.findViewById(R.id.tv_kelas_ngajar_list_ngajarku);
         mTvDurasi = (TextView) itemView.findViewById(R.id.tv_durasi_ngajar_list_ngajarku);
+        dotsOverflow = (ImageView) itemView.findViewById(R.id.dots_edit_ngajar);
 
     }
 

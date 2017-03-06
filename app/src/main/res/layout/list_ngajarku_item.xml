@@ -28,17 +28,16 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:textSize="22sp"
-                    tools:text="Algoritma dan Pemrograman 3"/>
+                    tools:text="Algoritma dan Pemrograman"/>
 
                 <LinearLayout
                     android:layout_gravity="center_vertical"
                     android:id="@+id/star_layout_list_ngajarku"
-                    android:layout_width="0dp"
                     android:layout_weight="1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/star_list_ngajarku"
@@ -55,6 +54,13 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         tools:text="7" />
+
+                    <ImageView
+                        android:id="@+id/dots_edit_ngajar"
+                        android:layout_gravity="end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_dots"/>
 
                 </LinearLayout>
 
