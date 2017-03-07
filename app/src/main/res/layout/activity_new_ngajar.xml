@@ -10,21 +10,51 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="win.aladhims.presensigeofence.NewNgajarActivity">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/til_nama_matkul_new_ngajar"
+    <LinearLayout
+        android:id="@+id/layout_matkul"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="8dp">
+        android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/et_nama_matkul_new_ngajar"
-            android:layout_width="match_parent"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_nama_matkul_new_ngajar"
+            android:layout_weight="5"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Nama Matkul"
-            android:maxLines="1" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="8dp">
 
-    </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/et_nama_matkul_new_ngajar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nama Matkul"
+                android:maxLines="1" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_weight="1.5"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SKS"/>
+
+            <Spinner
+                android:id="@+id/spinner_jumlah_sks_new_ngajar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
 
 
     <LinearLayout
@@ -32,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_below="@id/til_nama_matkul_new_ngajar"
+        android:layout_below="@id/layout_matkul"
         android:orientation="horizontal">
 
         <EditText
@@ -48,9 +78,10 @@
         <TextView
             android:layout_gravity="center"
             android:id="@+id/tv_waktu_picked"
-            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="08.30 AM"/>
+            tools:text="08.30"/>
 
         <Button
             android:gravity="end"

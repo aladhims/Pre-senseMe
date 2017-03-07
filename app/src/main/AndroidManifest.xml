@@ -13,7 +13,8 @@
         <activity android:name=".NewNgajarActivity" />
         <activity android:name=".DetailNgajarActivity" />
         <activity android:name=".EditProfilMahasiswa" />
-        <activity android:name=".SignInActivity">
+        <activity android:name=".SignInActivity"
+            android:theme="@style/NoBarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

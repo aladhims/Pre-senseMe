@@ -1,33 +1,25 @@
 package win.aladhims.presensigeofence;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.codetroopers.betterpickers.radialtimepicker.RadialTimePickerDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Calendar;
 
 import win.aladhims.presensigeofence.Model.Dosen;
 import win.aladhims.presensigeofence.Model.Ngajar;
@@ -41,7 +33,7 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
     private static final String DOSEN_CHILD = "dosen";
 
     private String mHari;
-    private int mDurasi,mJamMulai,mMenitMulai;
+    private int mDurasi,mJamMulai,mMenitMulai,mJumlahSKS;
 
     private DatabaseReference rootRef;
     private String keyBawaan;
@@ -49,7 +41,7 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
 
     private TextView mTvJamMulai;
     private EditText mEtNamaMatkul,mEtKelas;
-    private Spinner mSpinnerHari, mSpinnerDurasi;
+    private Spinner mSpinnerHari, mSpinnerDurasi,mSpinnerSKS;
     private FloatingActionButton mTambahNgajar;
     private Button mBtnTimePicker;
 
@@ -58,11 +50,14 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_ngajar);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         rootRef = FirebaseDatabase.getInstance().getReference();
         hariArray = getResources().getStringArray(R.array.hari_array);
         mTvJamMulai = (TextView) findViewById(R.id.tv_waktu_picked);
         mEtNamaMatkul = (EditText) findViewById(R.id.et_nama_matkul_new_ngajar);
         mEtKelas = (EditText) findViewById(R.id.et_kelas_new_ngajar);
+        mSpinnerSKS = (Spinner) findViewById(R.id.spinner_jumlah_sks_new_ngajar);
         mSpinnerDurasi = (Spinner) findViewById(R.id.spinner_durasi_new_ngajar);
         mSpinnerHari = (Spinner) findViewById(R.id.spinner_hari_new_ngajar);
         mTambahNgajar = (FloatingActionButton) findViewById(R.id.fab_konfirm_tambah_ngajar);
@@ -72,11 +67,15 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
         hariAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         final ArrayAdapter<Integer> durasiAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,new Integer[]{1,2,3});
         durasiAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        final ArrayAdapter<Integer> sksAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,new Integer[]{1,2,3});
+        sksAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         mSpinnerHari.setAdapter(hariAdapter);
         mSpinnerHari.setOnItemSelectedListener(this);
         mSpinnerDurasi.setAdapter(durasiAdapter);
         mSpinnerDurasi.setOnItemSelectedListener(this);
+        mSpinnerSKS.setAdapter(sksAdapter);
+        mSpinnerSKS.setOnItemSelectedListener(this);
         mTambahNgajar.setOnClickListener(this);
         mBtnTimePicker.setOnClickListener(this);
 
@@ -90,9 +89,14 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
                     mEtKelas.setText(ngajar.getKelasDiajar());
                     mJamMulai = ngajar.getJam();
                     mMenitMulai = ngajar.getMenit();
-                    mTvJamMulai.setText(ngajar.getJam()+":"+ngajar.getMenit());
+                    String jamToDisplay = String.valueOf(mJamMulai);
+                    String menitToDisplay = String.valueOf(mMenitMulai);
+                    if(mJamMulai < 10) jamToDisplay = "0" + mJamMulai;
+                    if(mMenitMulai < 10) menitToDisplay = "0" + mMenitMulai;
+                    mTvJamMulai.setText(jamToDisplay+":"+menitToDisplay);
                     mSpinnerHari.setSelection(checkPosisiHari(ngajar.getHari()));
                     mSpinnerDurasi.setSelection(durasiAdapter.getPosition(ngajar.getDurasiNgajar()));
+                    mSpinnerSKS.setSelection(sksAdapter.getPosition(ngajar.getJumlahSKS()));
                 }
 
                 @Override
@@ -128,7 +132,7 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
                     key = keyBawaan;
                 }
 
-                Ngajar n = new Ngajar(dosen.getPhotoUrl(),dosen.getNama(),dosen.getEmail(),dosen.getNohape(),0,namaMatkul,mHari,mJamMulai,mMenitMulai,kelas,mDurasi);
+                Ngajar n = new Ngajar(dosen.getPhotoUrl(),dosen.getNama(),dosen.getEmail(),dosen.getNIP(),dosen.getNohape(),0,namaMatkul,mJumlahSKS,mHari,mJamMulai,mMenitMulai,kelas,mDurasi);
                 rootRef.child("dosen-ngajar").child(getUid()).child(key).setValue(n);
                 rootRef.child("ngajar").child(key).setValue(n);
                 hideProgressDialog();
@@ -167,7 +171,12 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
     public void onTimeSet(RadialTimePickerDialogFragment dialog, int hourOfDay, int minute) {
         mJamMulai = hourOfDay;
         mMenitMulai = minute;
-        mTvJamMulai.setText(hourOfDay + ":" + minute);
+        String jamToDisplay = String.valueOf(hourOfDay);
+        String menitToDisplay = String.valueOf(minute);
+        if(hourOfDay < 10) jamToDisplay = "0" + hourOfDay;
+        if(minute < 10) menitToDisplay = "0" + minute;
+
+        mTvJamMulai.setText(jamToDisplay + ":" + menitToDisplay);
     }
 
     @Override
@@ -215,11 +224,34 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
                     mDurasi = 3;
                     break;
             }
+        }else if(parent.getId() == R.id.spinner_jumlah_sks_new_ngajar){
+            switch (position){
+                case 0:
+                    mJumlahSKS = 1;
+                    break;
+                case 1:
+                    mJumlahSKS = 2;
+                    break;
+                case 2:
+                    mJumlahSKS = 3;
+                    break;
+            }
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                startActivity(new Intent(this,MainWithDrawerActivity.class));
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

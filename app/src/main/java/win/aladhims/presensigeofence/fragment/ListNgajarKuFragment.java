@@ -43,6 +43,7 @@ public class ListNgajarKuFragment extends Fragment {
 
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,14 +76,18 @@ public class ListNgajarKuFragment extends Fragment {
                     public void onClick(View v) {
 
                         Intent i = new Intent(getActivity(),DetailNgajarActivity.class);
-                        i.putExtra("EXTRA_NGAJAR",key);
+                        i.putExtra(EXTRA_KEY_LIST_NGAJARKU,key);
                         startActivity(i);
                     }
                 });
 
                 viewHolder.mTvNamaMatkul.setText(model.getNamaMatkul());
                 viewHolder.mTvNumsStar.setText(String.valueOf(model.getJumlahStar()));
-                viewHolder.mTvWaktu.setText(model.getHari()+", "+model.getJam()+":"+model.getMenit());
+                String jamToDisplay = String.valueOf(model.getJam());
+                String menitToDisplay = String.valueOf(model.getMenit());
+                if(model.getJam() < 10) jamToDisplay = "0" + model.getJam();
+                if(model.getMenit() < 10) menitToDisplay = "0" + model.getMenit();
+                viewHolder.mTvWaktu.setText(model.getHari()+", "+ jamToDisplay +":"+ menitToDisplay);
                 viewHolder.mTvKelas.setText(model.getKelasDiajar());
                 viewHolder.mTvDurasi.setText(model.getDurasiNgajar()+" Jam");
                 viewHolder.dotsOverflow.setOnClickListener(new View.OnClickListener() {
