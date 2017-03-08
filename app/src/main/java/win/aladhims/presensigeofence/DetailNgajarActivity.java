@@ -1,6 +1,12 @@
 package win.aladhims.presensigeofence;
 
+import android.*;
+import android.Manifest;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,18 +14,37 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.LocationCallback;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import pub.devrel.easypermissions.EasyPermissions;
 import win.aladhims.presensigeofence.Model.Mahasiswa;
 import win.aladhims.presensigeofence.Model.MahasiswaPresent;
 import win.aladhims.presensigeofence.Model.Ngajar;
@@ -27,20 +52,25 @@ import win.aladhims.presensigeofence.ViewHolder.ListMahasiswaPresentViewHolder;
 import win.aladhims.presensigeofence.ViewHolder.ListMahasiswaViewHolder;
 import win.aladhims.presensigeofence.fragment.ListNgajarKuFragment;
 
-public class DetailNgajarActivity extends BaseActivity {
+public class DetailNgajarActivity extends BaseActivity
+        implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,EasyPermissions.PermissionCallbacks {
 
     private static final String TAG = DetailNgajarActivity.class.getSimpleName();
+    private static final int RC_PERMS_FINELOC = 123123;
+    String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
 
-    private int Pertemuan;
+    private int mDurasiSisa;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
 
     private String key;
 
-    private DatabaseReference mRootRef,mahasiswaIkutREf;
+    private DatabaseReference mRootRef,mahasiswaIkutREf,mNgajarRef;
     private FirebaseRecyclerAdapter<MahasiswaPresent,ListMahasiswaPresentViewHolder> mahasiswaAdapter;
 
     private TextView mTvNamaMatkul,mTvKelas,mTvWaktu,mTvNamaDosenPengajar,mTvNIPDosenPengajar,mTvDurasi;
-    private Spinner mSpinnerPertemuan;
     private CircleImageView mCiFotoDosen;
+    private Button mBtnMulai;
     private RecyclerView mRecyclerView;
 
     @Override
@@ -48,13 +78,18 @@ public class DetailNgajarActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_ngajar);
 
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
         key = getIntent().getStringExtra(ListNgajarKuFragment.EXTRA_KEY_LIST_NGAJARKU);
         mRootRef = FirebaseDatabase.getInstance().getReference();
-        mahasiswaIkutREf = mRootRef.child("ikutngajar-mahasiswa").child(key);
+        mNgajarRef = mRootRef.child("ikutngajar-mahasiswa").child(key);
+        mahasiswaIkutREf = mNgajarRef.child("mahasiswa");
 
-        MahasiswaPresent mp = new MahasiswaPresent();
-        mahasiswaIkutREf.child("DtPSigO7bGgju86aECl2aY30f8q1").setValue(mp);
-
+        mBtnMulai = (Button) findViewById(R.id.btn_mulai_ngajar);
         mTvNamaMatkul = (TextView) findViewById(R.id.tv_nama_matkul_detail_ngajar);
         mTvKelas = (TextView) findViewById(R.id.tv_kelas_detail_ngajar);
         mTvWaktu = (TextView) findViewById(R.id.tv_waktu_detail_ngajar);
@@ -62,33 +97,15 @@ public class DetailNgajarActivity extends BaseActivity {
         mTvNamaDosenPengajar = (TextView) findViewById(R.id.nama_dosen_list);
         mTvNIPDosenPengajar = (TextView) findViewById(R.id.nip_dosen_list);
         mTvDurasi = (TextView) findViewById(R.id.tv_durasi_detail_ngajar);
-        mSpinnerPertemuan = (Spinner) findViewById(R.id.spinner_pertemuan_detail_ngajar);
-        ArrayAdapter<Integer> pertemuanAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,new Integer[]{1,2,3});
-        pertemuanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerPertemuan.setAdapter(pertemuanAdapter);
-        mSpinnerPertemuan.setSelection(0);
-        mSpinnerPertemuan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
-                    case 0:
-                        setAdapterWithPertemuan(1);
-                        break;
-                    case 1:
-                        setAdapterWithPertemuan(2);
-                        break;
-                    case 2:
-                        setAdapterWithPertemuan(3);
-                        break;
-                }
-            }
 
+        mBtnMulai.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View v) {
+                mulaiNgajar();
             }
         });
 
+        //RecyclerView untuk mahasiswa yang sudah presensi;
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_list_presen_detail_ngajar);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
@@ -97,10 +114,11 @@ public class DetailNgajarActivity extends BaseActivity {
         lm.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(lm);
-        DatabaseReference pertRef = mahasiswaIkutREf.child("satu");
-        mahasiswaAdapter = new FirebaseRecyclerAdapter<MahasiswaPresent, ListMahasiswaPresentViewHolder>(MahasiswaPresent.class,R.layout.mahasiswa_presen_list_item,ListMahasiswaPresentViewHolder.class,pertRef) {
+        final DatabaseReference pertRef = mahasiswaIkutREf;
+        mahasiswaAdapter = new FirebaseRecyclerAdapter<MahasiswaPresent, ListMahasiswaPresentViewHolder>
+                (MahasiswaPresent.class,R.layout.mahasiswa_presen_list_item,ListMahasiswaPresentViewHolder.class,pertRef) {
             @Override
-            protected void populateViewHolder(final ListMahasiswaPresentViewHolder viewHolder, MahasiswaPresent model, int position) {
+            protected void populateViewHolder(final ListMahasiswaPresentViewHolder viewHolder, final MahasiswaPresent model, int position) {
 
                 mRootRef.child("users").child("mahasiswa").child(model.getMahasiswaUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -118,7 +136,15 @@ public class DetailNgajarActivity extends BaseActivity {
 
                     }
                 });
-                viewHolder.mTvTotalHadir.setText(String.valueOf(model.getTotalAbsen()));
+                viewHolder.mCbValidasi.setChecked(model.isValid());
+                viewHolder.mCbValidasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                        model.setValid(isChecked);
+                        MahasiswaPresent p = model;
+                        pertRef.child(model.getMahasiswaUid()).setValue(p);
+                    }
+                });
             }
         };
         mRecyclerView.setAdapter(mahasiswaAdapter);
@@ -136,8 +162,8 @@ public class DetailNgajarActivity extends BaseActivity {
                             .into(mCiFotoDosen);
                     mTvNamaDosenPengajar.setText(ngajar.getNamaDosen());
                     mTvNIPDosenPengajar.setText(ngajar.getNipDosen());
-                    mTvDurasi.setText(String.valueOf(ngajar.getDurasiNgajar()));
-
+                    mDurasiSisa = ngajar.getDurasiNgajar()*60;
+                    mTvDurasi.setText(String.valueOf(mDurasiSisa));
 
                 }
             }
@@ -149,7 +175,98 @@ public class DetailNgajarActivity extends BaseActivity {
         });
     }
 
-    public void setAdapterWithPertemuan(int per){
+    private void mulaiNgajar(){
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (mLastLocation != null) {
+                showProgressDialog();
+
+                GeoFire geo = new GeoFire(mNgajarRef);
+
+                geo.setLocation("lokasi", new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), new GeoFire.CompletionListener() {
+                    @Override
+                    public void onComplete(String key, DatabaseError error) {
+                        hideProgressDialog();
+                        if(error == null){
+                            GeoFire geoTest = new GeoFire(mNgajarRef);
+                            geoTest.getLocation("lokasi", new LocationCallback() {
+                                @Override
+                                public void onLocationResult(String key, GeoLocation location) {
+                                    Toast.makeText(getApplicationContext(),"lokasi dosen : "+ location.toString(),Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                            mBtnMulai.setEnabled(false);
+                            mBtnMulai.setVisibility(View.GONE);
+                            Long countLong = TimeUnit.MINUTES.toMillis(mDurasiSisa);
+                            CountDownTimer countDownTimer = new CountDownTimer(countLong, 1000) {
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                    mTvDurasi.setText(String.format("%d min", TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+                                }
+
+                                @Override
+                                public void onFinish() {
+                                    finish();
+                                }
+                            };
+                            countDownTimer.start();
+                        }
+                    }
+                });
+            }
+        }else {
+            EasyPermissions.requestPermissions(this,"Minta Ijin",RC_PERMS_FINELOC,perms);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mGoogleApiClient.disconnect();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        EasyPermissions.onRequestPermissionsResult(requestCode,permissions,grantResults,this);
+    }
+
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        mulaiNgajar();
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
 
     }
 }

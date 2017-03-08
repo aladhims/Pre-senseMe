@@ -38,27 +38,12 @@
                 tools:text="50414808" />
         </LinearLayout>
 
-        <LinearLayout
+        <CheckBox
             android:layout_gravity="end"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
+            android:id="@+id/cb_validasi_presen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/jumlah_presensi_mahasiswa_presen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textAlignment="center"
-                tools:text="14"/>
-
-            <CheckBox
-                android:id="@+id/cb_validasi_presen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
 
     </LinearLayout>
 

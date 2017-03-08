@@ -15,7 +15,7 @@ import win.aladhims.presensigeofence.R;
 public class ListMahasiswaPresentViewHolder extends RecyclerView.ViewHolder {
 
     public CircleImageView mCiMahasiswa;
-    public TextView mTvNamaMahasiswa,mTvNPMMahasiswa,mTvTotalHadir;
+    public TextView mTvNamaMahasiswa,mTvNPMMahasiswa;
     public CheckBox mCbValidasi;
 
     public ListMahasiswaPresentViewHolder(View itemView) {
@@ -24,7 +24,6 @@ public class ListMahasiswaPresentViewHolder extends RecyclerView.ViewHolder {
         mCiMahasiswa = (CircleImageView)itemView.findViewById(R.id.foto_mahasiswa_presen);
         mTvNamaMahasiswa = (TextView) itemView.findViewById(R.id.nama_mahasiswa_presen);
         mTvNPMMahasiswa = (TextView) itemView.findViewById(R.id.npm_mahasiswa_presen);
-        mTvTotalHadir = (TextView) itemView.findViewById(R.id.jumlah_presensi_mahasiswa_presen);
         mCbValidasi = (CheckBox) itemView.findViewById(R.id.cb_validasi_presen);
     }
 }
