@@ -248,7 +248,7 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                startActivity(new Intent(this,MainWithDrawerActivity.class));
+                startActivity(new Intent(this,DosenDrawerActivity.class));
                 finish();
                 return true;
         }

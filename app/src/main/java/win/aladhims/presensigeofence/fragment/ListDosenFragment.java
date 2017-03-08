@@ -2,6 +2,8 @@ package win.aladhims.presensigeofence.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +14,9 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -31,6 +36,7 @@ public class ListDosenFragment extends Fragment {
     private FirebaseRecyclerAdapter<Dosen,ListDosenViewHolder> mAdapter;
     private RecyclerView mRecyclerView;
 
+
     public ListDosenFragment() {
         // Required empty public constructor
     }
@@ -40,6 +46,8 @@ public class ListDosenFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
     }
 
@@ -90,4 +98,5 @@ public class ListDosenFragment extends Fragment {
         super.onDetach();
 
     }
+
 }

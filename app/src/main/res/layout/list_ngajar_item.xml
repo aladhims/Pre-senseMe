@@ -77,7 +77,7 @@
                         tools:text="Jumat, jam ke -1"/>
 
                     <TextView
-                        android:id="@+id/tv_jumlah_sks"
+                        android:id="@+id/tv_kelas"
                         android:drawableStart="@drawable/sks_gambar"
                         android:gravity="center_vertical"
                         android:layout_weight="1"

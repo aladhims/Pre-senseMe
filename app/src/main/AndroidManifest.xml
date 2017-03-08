@@ -26,8 +26,8 @@
         </activity>
         <activity
             android:name=".EditProfilDosen"
-            android:parentActivityName=".MainWithDrawerActivity" />
-        <activity android:name=".MainWithDrawerActivity"
+            android:parentActivityName=".DosenDrawerActivity" />
+        <activity android:name=".DosenDrawerActivity"
             android:theme="@style/NoBarTheme">
 
         </activity>

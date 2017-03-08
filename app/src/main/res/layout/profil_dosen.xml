@@ -21,7 +21,7 @@
         <TextView
             android:drawableStart="@drawable/contact_nama"
             android:gravity="center"
-            android:id="@+id/nama_pengajar"
+            android:id="@+id/tv_nama_pengajar"
             style="@style/Base.TextAppearance.AppCompat.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,19 +31,19 @@
         <TextView
             android:drawableStart="@drawable/contact_email"
             android:gravity="center"
-            android:id="@+id/email_dosen"
+            android:id="@+id/tv_email_dosen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/nama_pengajar"
+            android:layout_below="@+id/tv_nama_pengajar"
             tools:text="alfiandnm@gmail.com"/>
 
         <TextView
             android:drawableStart="@drawable/contact_phone"
             android:gravity="center"
-            android:id="@+id/tv_no_dosen"
+            android:id="@+id/tv_kontak_dosen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/email_dosen"
+            android:layout_below="@+id/tv_email_dosen"
             tools:text="085729494433"/>
 
     </RelativeLayout>

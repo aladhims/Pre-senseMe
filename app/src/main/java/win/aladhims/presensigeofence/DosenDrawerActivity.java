@@ -29,10 +29,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import win.aladhims.presensigeofence.Model.Dosen;
 import win.aladhims.presensigeofence.fragment.ListDosenFragment;
 import win.aladhims.presensigeofence.fragment.ListMahasiswaFragment;
+import win.aladhims.presensigeofence.fragment.ListNgajarFragment;
 import win.aladhims.presensigeofence.fragment.ListNgajarKuFragment;
 
 
-public class MainWithDrawerActivity extends BaseActivity {
+public class DosenDrawerActivity extends BaseActivity {
 
     public static final String EXTRA_FROM_MAINDRAWER = "EXTRADRAWER";
     public static final String VALUE_FROM_MAINDRAWER = "VALUEDRAWER";
@@ -61,7 +62,7 @@ public class MainWithDrawerActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_with_drawer);
+        setContentView(R.layout.activity_dosen_drawer);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -79,7 +80,7 @@ public class MainWithDrawerActivity extends BaseActivity {
 
         judulActivity = getResources().getStringArray(R.array.nav_item_activity_titles_dosen);
 
-        loadNavHeader();
+        //loadNavHeader();
 
         setUpNavigationView();
 
@@ -91,6 +92,7 @@ public class MainWithDrawerActivity extends BaseActivity {
 
 
     }
+
 
     private void loadNavHeader(){
         mRootRef.child("users").child("dosen").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -162,7 +164,8 @@ public class MainWithDrawerActivity extends BaseActivity {
                 ListDosenFragment listDosen = new ListDosenFragment();
                 return listDosen;
             case 3:
-
+                ListNgajarFragment listNgajarMahasiswa = new ListNgajarFragment();
+                return listNgajarMahasiswa;
             case 4:
 
             default:

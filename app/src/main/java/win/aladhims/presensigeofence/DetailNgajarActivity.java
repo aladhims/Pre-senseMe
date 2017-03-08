@@ -183,6 +183,7 @@ public class DetailNgajarActivity extends BaseActivity
 
                 GeoFire geo = new GeoFire(mNgajarRef);
 
+
                 geo.setLocation("lokasi", new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), new GeoFire.CompletionListener() {
                     @Override
                     public void onComplete(String key, DatabaseError error) {

@@ -191,7 +191,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             Dosen dosen = dataSnapshot.getValue(Dosen.class);
                                             if(dosen != null){
-                                                startActivity(new Intent(SignInActivity.this,MainWithDrawerActivity.class));
+                                                startActivity(new Intent(SignInActivity.this,DosenDrawerActivity.class));
                                                 finish();
                                             }else{
                                                 Intent i = new Intent(SignInActivity.this, EditProfilDosen.class);
@@ -295,7 +295,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.hasChild(getUid())){
                         hideProgressDialog();
-                        startActivity(new Intent(SignInActivity.this,MainWithDrawerActivity.class));
+                        startActivity(new Intent(SignInActivity.this,DosenDrawerActivity.class));
                         finish();
                     }else{
                         mDatabaseRef.child("users").child("mahasiswa").addListenerForSingleValueEvent(new ValueEventListener() {
