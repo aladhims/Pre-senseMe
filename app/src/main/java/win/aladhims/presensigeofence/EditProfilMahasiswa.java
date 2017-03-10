@@ -201,7 +201,7 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
                     public void onSuccess(Void aVoid) {
                         hideProgressDialog();
                         Toast.makeText(getApplicationContext(),"Update profil berhasil!",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(),DosenDrawerActivity.class));
+                        startActivity(new Intent(getApplicationContext(),MahasiswaDrawerActivity.class));
                         finish();
                     }
                 });

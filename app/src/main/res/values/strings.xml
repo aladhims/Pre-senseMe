@@ -28,6 +28,13 @@
         <item>Creator</item>
     </string-array>
 
+    <string-array name="nav_item_activity_titles_mahasiswa">
+        <item>List Ngajar</item>
+        <item>List Mahasiswa</item>
+        <item>List Dosen</item>
+        <item>Creator</item>
+    </string-array>
+
     <string-array name="hari_array">
         <item>Senin</item>
         <item>Selasa</item>

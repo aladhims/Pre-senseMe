@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_mahasiswa_drawer_list_ngajar"
+            android:icon="@drawable/contact_nama"
+            android:title="List Ngajar" />
+        <item
+            android:id="@+id/menu_mahasiswa_drawer_list_mahasiswa"
+            android:icon="@drawable/sks_gambar"
+            android:title="List Mahasiswa" />
+        <item
+            android:id="@+id/menu_mahasiswa_drawer_list_dosen"
+            android:icon="@drawable/date_gambar"
+            android:title="List Dosen" />
+
+    </group>
+
+    <item android:title="Other">
+        <menu>
+            <item
+                android:id="@+id/menu_mahasiswa_the_creator"
+                android:title="Creator" />
+
+        </menu>
+    </item>
+</menu>

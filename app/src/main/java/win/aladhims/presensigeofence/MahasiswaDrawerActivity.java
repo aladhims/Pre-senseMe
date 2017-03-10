@@ -1,7 +1,6 @@
 package win.aladhims.presensigeofence;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -10,11 +9,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,25 +25,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import win.aladhims.presensigeofence.Model.Dosen;
+import win.aladhims.presensigeofence.Model.Mahasiswa;
 import win.aladhims.presensigeofence.fragment.ListDosenFragment;
 import win.aladhims.presensigeofence.fragment.ListMahasiswaFragment;
 import win.aladhims.presensigeofence.fragment.ListNgajarFragment;
 import win.aladhims.presensigeofence.fragment.ListNgajarKuFragment;
 
+public class MahasiswaDrawerActivity extends BaseActivity {
 
-public class DosenDrawerActivity extends BaseActivity {
 
-    public static final String EXTRA_FROM_MAINDRAWER = "EXTRADRAWER";
-    public static final String VALUE_FROM_MAINDRAWER = "VALUEDRAWER";
+    public static final String EXTRA_FROM_MAHASISWADRAWER = "EXTRADRAWER";
+    public static final String VALUE_FROM_MAHASISWADRAWER = "VALUEDRAWER";
 
     private static int navItemIndex = 0;
 
-    private static final String TAG_LISTNGAJARKU = "listngajarku";
+    private static final String TAG_LISTNGAJAR = "listngajar";
     private static final String TAG_LISTMAHASISWA = "listmahasiswa";
     private static final String TAG_LISTDOSEN = "listdosen";
-    private static final String TAG_TIMELINE = "timeline";
-    public static String CURRENT_TAG = TAG_LISTNGAJARKU;
+
+    public static String CURRENT_TAG = TAG_LISTNGAJAR;
 
     private DatabaseReference mRootRef;
 
@@ -54,31 +53,31 @@ public class DosenDrawerActivity extends BaseActivity {
     private NavigationView mNavView;
     private DrawerLayout mDrawerLayout;
     private View mNavHeader;
-    private ImageView mIvBgProfil;
     private CircleImageView mCiUserFoto;
     private TextView mTvUserName,mTvUserID;
     private Toolbar toolbar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.drawer_dosen_main_layout);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.drawer_mahasiswa_main_layout);
+
+        toolbar = (Toolbar) findViewById(R.id.mahasiswa_toolbar);
         setSupportActionBar(toolbar);
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
 
         mHandler = new Handler();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_main);
-        mNavView = (NavigationView) findViewById(R.id.nav_view);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_mahasiswa_layout_main);
+        mNavView = (NavigationView) findViewById(R.id.nav_mahasiswa_view);
 
         mNavHeader = mNavView.getHeaderView(0);
         mTvUserName = (TextView) mNavHeader.findViewById(R.id.tv_drawer_header_name);
         mTvUserID = (TextView) mNavHeader.findViewById(R.id.tv_drawer_header_id);
-        mIvBgProfil = (ImageView) mNavHeader.findViewById(R.id.img_header_bg);
         mCiUserFoto = (CircleImageView) mNavHeader.findViewById(R.id.ci_drawer_header_foto);
 
-        judulActivity = getResources().getStringArray(R.array.nav_item_activity_titles_dosen);
+        judulActivity = getResources().getStringArray(R.array.nav_item_activity_titles_mahasiswa);
 
         loadNavHeader();
 
@@ -86,25 +85,22 @@ public class DosenDrawerActivity extends BaseActivity {
 
         if(savedInstanceState == null){
             navItemIndex = 0;
-            CURRENT_TAG = TAG_LISTNGAJARKU;
+            CURRENT_TAG = TAG_LISTNGAJAR;
             loadFragment();
         }
-
-
     }
 
-
     private void loadNavHeader(){
-        mRootRef.child("users").child("dosen").child(getUid())
+        mRootRef.child("users").child("mahasiswa").child(getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Dosen dosen = dataSnapshot.getValue(Dosen.class);
+                        Mahasiswa mahasiswa = dataSnapshot.getValue(Mahasiswa.class);
                         Glide.with(getApplicationContext())
-                                .load(dosen.getPhotoUrl())
+                                .load(mahasiswa.getPhotoUrl())
                                 .into(mCiUserFoto);
-                        mTvUserName.setText(dosen.getNama());
-                        mTvUserID.setText(dosen.getNIP());
+                        mTvUserName.setText(mahasiswa.getNama());
+                        mTvUserID.setText(mahasiswa.getNPM());
                     }
 
                     @Override
@@ -136,7 +132,7 @@ public class DosenDrawerActivity extends BaseActivity {
                 Fragment fragment = getFragment();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,android.R.anim.fade_out);
-                fragmentTransaction.replace(R.id.drawer_content_frame,fragment,CURRENT_TAG);
+                fragmentTransaction.replace(R.id.drawer_mahasiswa_content_frame,fragment,CURRENT_TAG);
                 fragmentTransaction.commitAllowingStateLoss();
             }
         };
@@ -155,7 +151,7 @@ public class DosenDrawerActivity extends BaseActivity {
     private Fragment getFragment(){
         switch (navItemIndex){
             case 0:
-                ListNgajarKuFragment listNgajar = new ListNgajarKuFragment();
+                ListNgajarFragment listNgajar = new ListNgajarFragment();
                 return listNgajar;
             case 1:
                 ListMahasiswaFragment listMahasiswa = new ListMahasiswaFragment();
@@ -186,21 +182,17 @@ public class DosenDrawerActivity extends BaseActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.menu_drawer_list_ngajarku:
+                    case R.id.menu_mahasiswa_drawer_list_ngajar:
                         navItemIndex = 0;
-                        CURRENT_TAG = TAG_LISTNGAJARKU;
+                        CURRENT_TAG = TAG_LISTNGAJAR;
                         break;
-                    case R.id.menu_drawer_list_mahasiswa:
+                    case R.id.menu_mahasiswa_drawer_list_mahasiswa:
                         navItemIndex = 1;
                         CURRENT_TAG = TAG_LISTMAHASISWA;
                         break;
-                    case R.id.menu_drawer_list_dosen:
+                    case R.id.menu_mahasiswa_drawer_list_dosen:
                         navItemIndex = 2;
                         CURRENT_TAG = TAG_LISTDOSEN;
-                        break;
-                    case R.id.menu_drawer_timeline:
-                        navItemIndex = 3;
-                        CURRENT_TAG = TAG_TIMELINE;
                         break;
                     default:
                         navItemIndex = 0;
@@ -269,7 +261,7 @@ public class DosenDrawerActivity extends BaseActivity {
                 break;
             case R.id.menu_to_edit_profil_dosen_list_ngajarku:
                 Intent i = new Intent(this,EditProfilDosen.class);
-                i.putExtra(EXTRA_FROM_MAINDRAWER,VALUE_FROM_MAINDRAWER);
+                i.putExtra(EXTRA_FROM_MAHASISWADRAWER,VALUE_FROM_MAHASISWADRAWER);
                 startActivity(i);
                 break;
             case R.id.menu_sign_out_dosen_list_mahasiswa:

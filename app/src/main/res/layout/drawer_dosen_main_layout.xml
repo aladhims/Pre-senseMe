@@ -41,6 +41,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/drawer_header_layout"
-        app:menu="@menu/menu_drawer"/>
+        app:headerLayout="@layout/drawer_dosen_header_layout"
+        app:menu="@menu/menu_dosen_drawer"/>
 </android.support.v4.widget.DrawerLayout>

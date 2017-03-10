@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.geofire.GeoFire;
@@ -28,6 +29,8 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -87,7 +90,7 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
         rootView = inflater.inflate(R.layout.list_ngajar,container,false);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        ngajarRef = mDatabaseReference.child("ngajar");
+        ngajarRef = mDatabaseReference.child("ikutngajar-mahasiswa");
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_list_ngajar);
 
         LinearLayoutManager lm = new LinearLayoutManager(getActivity());
@@ -97,31 +100,45 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
 
         mAdapter = new FirebaseRecyclerAdapter<Ngajar, ListNgajarViewHolder>(Ngajar.class,R.layout.list_ngajar_item,ListNgajarViewHolder.class,ngajarRef) {
             @Override
-            protected void populateViewHolder(ListNgajarViewHolder viewHolder, Ngajar model, int position) {
+            protected void populateViewHolder(final ListNgajarViewHolder viewHolder, Ngajar model, int position) {
                 key = getRef(position).getKey();
-
-                locRef = mDatabaseReference.child("ikutngajar-mahasiswa").child(key);
-                Log.d(TAG, key);
-
-                Glide.with(getActivity())
-                        .load(model.getPhotoURLDosen())
-                        .into(viewHolder.mIvFotoDosen);
-
-                viewHolder.mTvNamaDosen.setText(model.getNamaDosen());
-                viewHolder.mTvEmailDosen.setText(model.getEmailDosen());
-                viewHolder.mTvKontakDosen.setText(model.getKontakDosen());
-                viewHolder.mTvNamaMatkul.setText(model.getNamaMatkul());
-                viewHolder.mTvWaktuMulai.setText(model.makeJamNgajar());
-                viewHolder.mTvKelas.setText(model.getKelasDiajar());
-                viewHolder.mTvDurasi.setText(String.valueOf(model.getDurasiNgajar()));
-                viewHolder.mTvJumlahBintang.setText(String.valueOf(model.getJumlahStar()));
-
-                viewHolder.mBtnIkut.setOnClickListener(new View.OnClickListener() {
+                mDatabaseReference.child("ngajar").child(key).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onClick(View v) {
-                        ikutMatkul(key);
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        Ngajar ngajar = dataSnapshot.getValue(Ngajar.class);
+
+                        locRef = mDatabaseReference.child("ikutngajar-mahasiswa").child(key);
+                        Log.d(TAG, key);
+
+                        Glide.with(getActivity())
+                                .load(ngajar.getPhotoURLDosen())
+                                .into(viewHolder.mIvFotoDosen);
+
+                        viewHolder.mTvNamaDosen.setText(ngajar.getNamaDosen());
+                        viewHolder.mTvEmailDosen.setText(ngajar.getEmailDosen());
+                        viewHolder.mTvKontakDosen.setText(ngajar.getKontakDosen());
+                        viewHolder.mTvNamaMatkul.setText(ngajar.getNamaMatkul());
+                        viewHolder.mTvWaktuMulai.setText(ngajar.getHari()+ ", " + ngajar.makeJamNgajar());
+                        viewHolder.mTvKelas.setText(ngajar.getKelasDiajar());
+                        viewHolder.mTvDurasi.setText(String.valueOf(ngajar.getDurasiNgajar()));
+                        viewHolder.mTvJumlahBintang.setText(String.valueOf(ngajar.getJumlahStar()));
+
+                        viewHolder.mBtnIkut.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                ikutMatkul(key);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
                     }
                 });
+
+
             }
         };
         mRecyclerView.setAdapter(mAdapter);
@@ -131,11 +148,11 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
 
     public void ikutMatkul(final String k){
         if (EasyPermissions.hasPermissions(getActivity(), perms)) {
-            showDialogForFragment(getActivity());
             GeoFire ngajarLoc = new GeoFire(locRef);
 
             final Location mahasiswaLoc =  LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if(mahasiswaLoc != null) {
+                showDialogForFragment(getActivity());
                 ngajarLoc.getLocation("lokasi", new LocationCallback() {
                     @Override
                     public void onLocationResult(String key, GeoLocation location) {
@@ -146,23 +163,39 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
 
                         if (mahasiswaLoc.distanceTo(dosenLoc) <= 20) {
                             hideDialogForFragment();
-                            Snackbar.make(rootView,"Berhasil Ikut Kelas!",Snackbar.LENGTH_LONG).show();
+                            String uid  = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            MahasiswaPresent mp = new MahasiswaPresent(uid);
+                            locRef.child("mahasiswa").child(uid).setValue(mp)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if(task.isSuccessful()){
+                                                Snackbar.make(rootView,"Berhasil Ikut Kelas!",Snackbar.LENGTH_LONG).show();
+                                                Intent i = new Intent(getActivity(), DetailNgajarActivity.class);
+                                                i.putExtra(EXTRA_FROM_LISTNGAJAR, k);
+                                                startActivity(i);
+                                                getActivity().finish();
+                                            }else{
+                                                Snackbar.make(rootView,"Gagal ikut kelas",Snackbar.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
 
-                            /*
-                            Intent i = new Intent(getActivity(), DetailNgajarActivity.class);
-                            i.putExtra(EXTRA_FROM_LISTNGAJAR, k);
-                            startActivity(i);
-                            getActivity().finish();
-                            */
 
+                        }else if(mahasiswaLoc.distanceTo(dosenLoc) > 20){
+                            hideDialogForFragment();
+                            Snackbar.make(rootView,"Jarak terlalu jauh dari pengajar!",Snackbar.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        hideDialogForFragment();
+                        Log.e(TAG, databaseError.getMessage());
                     }
                 });
+            }else{
+                Toast.makeText(getActivity(), "Lokasi tidak ada/error", Toast.LENGTH_SHORT).show();
             }
         }else{
             EasyPermissions.requestPermissions(getActivity(),"Minta Ijin",RC_PERMS_FINELOC,perms);

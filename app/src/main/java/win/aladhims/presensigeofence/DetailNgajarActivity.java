@@ -189,26 +189,13 @@ public class DetailNgajarActivity extends BaseActivity
                     public void onComplete(String key, DatabaseError error) {
                         hideProgressDialog();
                         if(error == null){
-                            GeoFire geoTest = new GeoFire(mNgajarRef);
-                            geoTest.getLocation("lokasi", new LocationCallback() {
-                                @Override
-                                public void onLocationResult(String key, GeoLocation location) {
-                                    Toast.makeText(getApplicationContext(),"lokasi dosen : "+ location.toString(),Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-
                             mBtnMulai.setEnabled(false);
                             mBtnMulai.setVisibility(View.GONE);
                             Long countLong = TimeUnit.MINUTES.toMillis(mDurasiSisa);
                             CountDownTimer countDownTimer = new CountDownTimer(countLong, 1000) {
                                 @Override
                                 public void onTick(long millisUntilFinished) {
-                                    mTvDurasi.setText(String.format("%d min", TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+                                    mTvDurasi.setText(String.format("%d", TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
                                 }
 
                                 @Override
