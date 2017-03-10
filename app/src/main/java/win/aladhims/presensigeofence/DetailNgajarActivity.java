@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -181,14 +182,15 @@ public class DetailNgajarActivity extends BaseActivity
             if (mLastLocation != null) {
                 showProgressDialog();
 
-                GeoFire geo = new GeoFire(mNgajarRef);
-
-
-                geo.setLocation("lokasi", new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), new GeoFire.CompletionListener() {
+                Map<String ,Object> locHash = new HashMap<>();
+                locHash.put("lat",mLastLocation.getLatitude());
+                locHash.put("long",mLastLocation.getLongitude());
+                mNgajarRef.updateChildren(locHash).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onComplete(String key, DatabaseError error) {
+                    public void onComplete(@NonNull Task<Void> task) {
                         hideProgressDialog();
-                        if(error == null){
+                        if(task.isSuccessful()){
+                            Toast.makeText(getApplicationContext(),"Berhasil memulai pelajaran!",Toast.LENGTH_LONG).show();
                             mBtnMulai.setEnabled(false);
                             mBtnMulai.setVisibility(View.GONE);
                             Long countLong = TimeUnit.MINUTES.toMillis(mDurasiSisa);
@@ -204,6 +206,8 @@ public class DetailNgajarActivity extends BaseActivity
                                 }
                             };
                             countDownTimer.start();
+                        }else{
+                            Toast.makeText(getApplicationContext(),"ada kesalahan memasukan data ke database",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

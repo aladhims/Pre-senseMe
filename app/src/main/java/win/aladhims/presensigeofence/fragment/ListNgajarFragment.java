@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -148,50 +149,51 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
 
     public void ikutMatkul(final String k){
         if (EasyPermissions.hasPermissions(getActivity(), perms)) {
-            GeoFire ngajarLoc = new GeoFire(locRef);
 
             final Location mahasiswaLoc =  LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if(mahasiswaLoc != null) {
                 showDialogForFragment(getActivity());
-                ngajarLoc.getLocation("lokasi", new LocationCallback() {
+                locRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onLocationResult(String key, GeoLocation location) {
-                        Location dosenLoc = new Location("dosen");
-                        dosenLoc.setLatitude(location.latitude);
-                        dosenLoc.setLongitude(location.longitude);
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        double Lat = (double) dataSnapshot.child("lat").getValue();
+                        double Long = (double) dataSnapshot.child("long").getValue();
 
+                        Location loc = new Location("loc");
+                        loc.setLatitude(Lat);
+                        loc.setLongitude(Long);
+                        Float distance = mahasiswaLoc.distanceTo(loc);
 
-                        if (mahasiswaLoc.distanceTo(dosenLoc) <= 20) {
-                            hideDialogForFragment();
-                            String uid  = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        if (distance <= 20) {
+                            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                             MahasiswaPresent mp = new MahasiswaPresent(uid);
                             locRef.child("mahasiswa").child(uid).setValue(mp)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful()){
-                                                Snackbar.make(rootView,"Berhasil Ikut Kelas!",Snackbar.LENGTH_LONG).show();
-                                                Intent i = new Intent(getActivity(), DetailNgajarActivity.class);
+                                            hideDialogForFragment();
+                                            if (task.isSuccessful()) {
+                                                Snackbar.make(rootView, "Berhasil ikut kelas", Snackbar.LENGTH_LONG).show();
+                                                /*Intent i = new Intent(getActivity(), DetailNgajarActivity.class);
                                                 i.putExtra(EXTRA_FROM_LISTNGAJAR, k);
                                                 startActivity(i);
-                                                getActivity().finish();
-                                            }else{
-                                                Snackbar.make(rootView,"Gagal ikut kelas",Snackbar.LENGTH_LONG).show();
+                                                getActivity().finish();*/
+                                            } else {
+                                                Snackbar.make(rootView, "Gagal ikut kelas", Snackbar.LENGTH_LONG).show();
                                             }
                                         }
                                     });
 
 
-                        }else if(mahasiswaLoc.distanceTo(dosenLoc) > 20){
+                        } else if (distance > 20) {
                             hideDialogForFragment();
-                            Snackbar.make(rootView,"Jarak terlalu jauh dari pengajar!",Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(rootView, "Jarak terlalu jauh dari pengajar!", Snackbar.LENGTH_LONG).show();
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        hideDialogForFragment();
-                        Log.e(TAG, databaseError.getMessage());
+
                     }
                 });
             }else{

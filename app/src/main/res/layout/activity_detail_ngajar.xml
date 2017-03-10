@@ -49,10 +49,45 @@
                 tools:text="Senin,14:30"/>
         </LinearLayout>
 
-        <include
-            layout="@layout/list_dosen_item"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="match_parent" />
+            android:padding="4dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/foto_dosen_list"
+                android:layout_gravity="center_vertical"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/photo"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"/>
+
+            <LinearLayout
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/nama_dosen_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    tools:text="Dhimas"/>
+
+                <TextView
+                    android:id="@+id/nip_dosen_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    tools:text="A5435FG87K" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
 
 
     </LinearLayout>

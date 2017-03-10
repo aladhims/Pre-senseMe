@@ -240,34 +240,22 @@ public class MahasiswaDrawerActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        switch (navItemIndex){
-            case 0:
-                getMenuInflater().inflate(R.menu.list_ngajarku_menu,menu);
-                return true;
-            case 1:
-                getMenuInflater().inflate(R.menu.menu_list_mahasiswa,menu);
-                return true;
-        }
+       getMenuInflater().inflate(R.menu.menu_bar_mahasiswa_drawer,menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.menu_sign_out_dosen_list_ngajarku:
+            case R.id.menu_sign_out_mahasiswa:
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(this,SignInActivity.class));
                 finish();
                 break;
-            case R.id.menu_to_edit_profil_dosen_list_ngajarku:
-                Intent i = new Intent(this,EditProfilDosen.class);
+            case R.id.menu_to_edit_profil_mahasiswa:
+                Intent i = new Intent(this,EditProfilMahasiswa.class);
                 i.putExtra(EXTRA_FROM_MAHASISWADRAWER,VALUE_FROM_MAHASISWADRAWER);
                 startActivity(i);
-                break;
-            case R.id.menu_sign_out_dosen_list_mahasiswa:
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(this,SignInActivity.class));
-                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);

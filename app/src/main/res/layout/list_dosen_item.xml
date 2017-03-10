@@ -3,46 +3,65 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view_dosen_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="4dp">
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/card_margin"
+        app:cardElevation="8dp"
+        app:cardCornerRadius="@dimen/card_album_radius">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/foto_dosen_list"
-            android:layout_gravity="center_vertical"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/photo"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_weight="2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/nama_dosen_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                tools:text="Dhimas"/>
+            <ImageView
+                android:id="@+id/iv_dosen_item"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/album_cover_height"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:scaleType="centerCrop" />
 
             <TextView
-                android:id="@+id/nip_dosen_list"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_nama_dosen_item"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                tools:text="A5435FG87K" />
+                android:layout_below="@id/iv_dosen_item"
+                android:paddingLeft="@dimen/album_title_padding"
+                android:paddingRight="@dimen/album_title_padding"
+                android:paddingTop="@dimen/album_title_padding"
+                android:textColor="#4c4c4c"
+                android:textSize="15sp"
+                tools:text="Alfian Dhimas Nur Mareta"/>
 
+            <TextView
+                android:id="@+id/tv_nip_dosen_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_nama_dosen_item"
+                android:paddingBottom="@dimen/songs_count_padding_bottom"
+                android:paddingLeft="@dimen/album_title_padding"
+                android:paddingRight="@dimen/album_title_padding"
+                android:textSize="12sp"
+                tools:text="5041480ASS8"/>
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/overflow"
+                android:layout_marginTop="@dimen/ic_album_overflow_margin_top"
+                android:layout_width="@dimen/ic_album_overflow_width"
+                android:layout_height="@dimen/ic_album_overflow_height"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/iv_dosen_item"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_dots" />
 
-    </LinearLayout>
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

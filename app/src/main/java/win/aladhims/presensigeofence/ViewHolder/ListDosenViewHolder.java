@@ -1,7 +1,9 @@
 package win.aladhims.presensigeofence.ViewHolder;
 
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -13,14 +15,14 @@ import win.aladhims.presensigeofence.R;
 
 public class ListDosenViewHolder extends RecyclerView.ViewHolder {
 
-    public CircleImageView mCiFotoDosen;
+    public ImageView mIvFotoDosen;
     public TextView mTvNamaDosen,mTvNIPDosen;
 
     public ListDosenViewHolder(View itemView) {
         super(itemView);
 
-        mCiFotoDosen = (CircleImageView) itemView.findViewById(R.id.foto_dosen_list);
-        mTvNamaDosen = (TextView) itemView.findViewById(R.id.nama_dosen_list);
-        mTvNIPDosen = (TextView) itemView.findViewById(R.id.nip_dosen_list);
+        mIvFotoDosen = (ImageView) itemView.findViewById(R.id.iv_dosen_item);
+        mTvNamaDosen = (TextView) itemView.findViewById(R.id.tv_nama_dosen_item);
+        mTvNIPDosen = (TextView) itemView.findViewById(R.id.tv_nip_dosen_item);
     }
 }

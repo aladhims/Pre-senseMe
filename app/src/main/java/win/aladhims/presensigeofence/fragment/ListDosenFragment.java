@@ -1,16 +1,22 @@
 package win.aladhims.presensigeofence.fragment;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -35,6 +41,7 @@ public class ListDosenFragment extends Fragment {
     private DatabaseReference mDatabaseReference;
     private FirebaseRecyclerAdapter<Dosen,ListDosenViewHolder> mAdapter;
     private RecyclerView mRecyclerView;
+    private ProgressBar mProgressBar;
 
 
     public ListDosenFragment() {
@@ -58,29 +65,26 @@ public class ListDosenFragment extends Fragment {
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child("dosen");
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.rv_list_dosen);
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.pg_list_dosen);
 
 
-
-        LinearLayoutManager lm = new LinearLayoutManager(getActivity());
-        lm.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setHasFixedSize(true);
+        GridLayoutManager lm = new GridLayoutManager(getActivity(),2);
+        mRecyclerView.addItemDecoration(new GridSpacingItemDecoration(2,dpToPx(5),true));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setLayoutManager(lm);
 
         mAdapter = new FirebaseRecyclerAdapter<Dosen, ListDosenViewHolder>
                 (Dosen.class,R.layout.list_dosen_item,ListDosenViewHolder.class,mDatabaseReference) {
             @Override
             protected void populateViewHolder(ListDosenViewHolder viewHolder, Dosen dosen, int position) {
-
+                mProgressBar.setVisibility(View.GONE);
                 Glide.with(getActivity())
                         .load(dosen.getPhotoUrl())
-                        .into(viewHolder.mCiFotoDosen);
+                        .into(viewHolder.mIvFotoDosen);
                 viewHolder.mTvNamaDosen.setText(dosen.getNama());
                 viewHolder.mTvNIPDosen.setText(dosen.getNIP());
             }
         };
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
-                lm.getOrientation());
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
         mRecyclerView.setAdapter(mAdapter);
         return rootView;
     }
@@ -97,6 +101,49 @@ public class ListDosenFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
 
+    }
+
+    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+
+        private int spanCount;
+        private int spacing;
+        private boolean includeEdge;
+
+        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+            this.spanCount = spanCount;
+            this.spacing = spacing;
+            this.includeEdge = includeEdge;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int position = parent.getChildAdapterPosition(view); // item position
+            int column = position % spanCount; // item column
+
+            if (includeEdge) {
+                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
+                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
+
+                if (position < spanCount) { // top edge
+                    outRect.top = spacing;
+                }
+                outRect.bottom = spacing; // item bottom
+            } else {
+                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
+                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                if (position >= spanCount) {
+                    outRect.top = spacing; // item top
+                }
+            }
+        }
+    }
+
+    /**
+     * Converting dp to pixel
+     */
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
 }
