@@ -35,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import win.aladhims.presensigeofence.Model.Dosen;
+import win.aladhims.presensigeofence.Model.Mahasiswa;
 
 public class SignInActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
     public static final String FROM_SIGNIN = "SKIP";
@@ -209,10 +210,26 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                                     });
                                     break;
                                 case MAHASISWA_TYPE:
-                                    Intent a = new Intent(SignInActivity.this, EditProfilMahasiswa.class);
-                                    a.putExtra(BaseActivity.EXTRA_FROM, FROM_SIGNIN);
-                                    startActivity(a);
-                                    finish();
+                                    mDatabaseRef.child("users").child("mahasiswa").child(getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            Mahasiswa m = dataSnapshot.getValue(Mahasiswa.class);
+                                            if(m != null){
+                                                startActivity(new Intent(SignInActivity.this,MahasiswaDrawerActivity.class));
+                                                finish();
+                                            }else {
+                                                Intent a = new Intent(SignInActivity.this, EditProfilMahasiswa.class);
+                                                a.putExtra(BaseActivity.EXTRA_FROM, FROM_SIGNIN);
+                                                startActivity(a);
+                                                finish();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
                                     break;
                             }
                         }else{
@@ -230,10 +247,26 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                         if(!task.isSuccessful()){
                             Log.e(TAG,"error dengan credential");
                         } else {
-                            Intent a = new Intent(SignInActivity.this,EditProfilMahasiswa.class);
-                            a.putExtra(BaseActivity.EXTRA_FROM,FROM_SIGNIN);
-                            startActivity(a);
-                            finish();
+                            mDatabaseRef.child("users").child("mahasiswa").child(getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Mahasiswa m = dataSnapshot.getValue(Mahasiswa.class);
+                                    if(m != null){
+                                        startActivity(new Intent(SignInActivity.this,MahasiswaDrawerActivity.class));
+                                        finish();
+                                    }else {
+                                        Intent a = new Intent(SignInActivity.this, EditProfilMahasiswa.class);
+                                        a.putExtra(BaseActivity.EXTRA_FROM, FROM_SIGNIN);
+                                        startActivity(a);
+                                        finish();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
                         }
                     }
                 });
@@ -303,8 +336,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if(dataSnapshot.hasChild(getUid())){
                                     hideProgressDialog();
-                                    //dummy intent
-                                    startActivity(new Intent(SignInActivity.this,EditProfilMahasiswa.class));
+                                    startActivity(new Intent(SignInActivity.this,MahasiswaDrawerActivity.class));
                                     finish();
                                 }
                             }

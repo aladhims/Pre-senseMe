@@ -63,7 +63,6 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
     private static final String EXTRA_FROM_LISTNGAJAR = "NGAJAR";
 
     String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
-    private String key;
     private View rootView;
 
     private GoogleApiClient mGoogleApiClient;
@@ -102,15 +101,12 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
         mAdapter = new FirebaseRecyclerAdapter<Ngajar, ListNgajarViewHolder>(Ngajar.class,R.layout.list_ngajar_item,ListNgajarViewHolder.class,ngajarRef) {
             @Override
             protected void populateViewHolder(final ListNgajarViewHolder viewHolder, Ngajar model, int position) {
-                key = getRef(position).getKey();
-                mDatabaseReference.child("ngajar").child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                final String thisKey = getRef(position).getKey();
+                mDatabaseReference.child("ngajar").child(thisKey).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         Ngajar ngajar = dataSnapshot.getValue(Ngajar.class);
-
-                        locRef = mDatabaseReference.child("ikutngajar-mahasiswa").child(key);
-                        Log.d(TAG, key);
 
                         Glide.with(getActivity())
                                 .load(ngajar.getPhotoURLDosen())
@@ -128,7 +124,7 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
                         viewHolder.mBtnIkut.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                ikutMatkul(key);
+                                ikutMatkul(thisKey);
                             }
                         });
                     }
@@ -149,11 +145,12 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
 
     public void ikutMatkul(final String k){
         if (EasyPermissions.hasPermissions(getActivity(), perms)) {
+            final DatabaseReference mThisKeyRef = mDatabaseReference.child("ikutngajar-mahasiswa").child(k);
 
             final Location mahasiswaLoc =  LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if(mahasiswaLoc != null) {
                 showDialogForFragment(getActivity());
-                locRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                mThisKeyRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         double Lat = (double) dataSnapshot.child("lat").getValue();
@@ -167,7 +164,7 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
                         if (distance <= 20) {
                             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                             MahasiswaPresent mp = new MahasiswaPresent(uid);
-                            locRef.child("mahasiswa").child(uid).setValue(mp)
+                            mThisKeyRef.child("mahasiswa").child(uid).setValue(mp)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
@@ -271,7 +268,7 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-        ikutMatkul(key);
+
     }
 
     @Override

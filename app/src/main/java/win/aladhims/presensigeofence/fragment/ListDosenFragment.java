@@ -1,6 +1,7 @@
 package win.aladhims.presensigeofence.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -23,9 +24,11 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import win.aladhims.presensigeofence.DetailProfil;
 import win.aladhims.presensigeofence.Model.Dosen;
 import win.aladhims.presensigeofence.Model.Mahasiswa;
 import win.aladhims.presensigeofence.R;
@@ -37,6 +40,8 @@ import win.aladhims.presensigeofence.ViewHolder.ListMahasiswaViewHolder;
  */
 
 public class ListDosenFragment extends Fragment {
+
+    public static final String EXTRA_DOSEN_PROFIL = "DOSEN";
 
     private DatabaseReference mDatabaseReference;
     private FirebaseRecyclerAdapter<Dosen,ListDosenViewHolder> mAdapter;
@@ -77,6 +82,17 @@ public class ListDosenFragment extends Fragment {
                 (Dosen.class,R.layout.list_dosen_item,ListDosenViewHolder.class,mDatabaseReference) {
             @Override
             protected void populateViewHolder(ListDosenViewHolder viewHolder, Dosen dosen, int position) {
+                final String id = getRef(position).getKey();
+                if (!FirebaseAuth.getInstance().getCurrentUser().getUid().equals(id)) {
+                    viewHolder.mIvFotoDosen.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(getActivity(), DetailProfil.class);
+                            i.putExtra(EXTRA_DOSEN_PROFIL, id);
+                            startActivity(i);
+                        }
+                    });
+                }
                 mProgressBar.setVisibility(View.GONE);
                 Glide.with(getActivity())
                         .load(dosen.getPhotoUrl())

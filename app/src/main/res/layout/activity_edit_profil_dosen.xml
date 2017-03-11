@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_edit_profil_mahasiswa"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -15,8 +16,11 @@
         android:layout_gravity="center_horizontal"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/photo"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+        android:src="@drawable/ic_action_account_circle_40"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        app:border_overlay="false"
+        app:border_width="4dp"
+        app:border_color="#CFD8DC"/>
 
     <Button
         android:layout_below="@+id/ci_foto_profil_dosen"
@@ -61,7 +65,7 @@
         android:drawableStart="@drawable/contact_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:hint="Nomor Telefon Anda"/>
+        android:hint="Nomor Telefon Anda"/>
 
 
     <Button

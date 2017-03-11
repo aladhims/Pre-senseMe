@@ -71,7 +71,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="5"
-            tools:hint="Kelas"
+            android:hint="Kelas"
             android:maxLines="1"
             android:layout_marginEnd="10dp"/>
 
@@ -81,7 +81,7 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="08.30"/>
+            android:text="Waktu"/>
 
         <Button
             android:gravity="end"
@@ -147,12 +147,6 @@
             android:text="@string/jam_label"/>
 
     </LinearLayout>
-
-
-
-
-
-
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_konfirm_tambah_ngajar"

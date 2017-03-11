@@ -80,8 +80,13 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
         mUbahFotoBtn = (Button) findViewById(R.id.btn_ganti_foto_mahasiswa);
         mSkipOrCancelBtn = (Button) findViewById(R.id.btn_skip_or_cancel_mahasiswa);
         Intent i = getIntent();
-        String txt = i.getStringExtra(BaseActivity.EXTRA_FROM);
-        mSkipOrCancelBtn.setText(txt);
+        if(i.getStringExtra(MahasiswaDrawerActivity.EXTRA_FROM_MAHASISWADRAWER) != null){
+            mSkipOrCancelBtn.setText("CANCEL");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }else if(i.getStringExtra(BaseActivity.EXTRA_FROM) != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            mSkipOrCancelBtn.setVisibility(View.GONE);
+        }
         mEtNPMMahasiswa = (EditText) findViewById(R.id.et_edit_npm_mahasiswa);
         mEtNamaMahasiswa = (EditText) findViewById(R.id.et_edit_nama_mahasiswa);
         mEtKelasMahasiswa = (EditText) findViewById(R.id.et_edit_kelas_mahasiswa);
@@ -208,7 +213,8 @@ public class EditProfilMahasiswa extends BaseActivity implements View.OnClickLis
     }
 
     private void skipOrCancel(){
-
+        startActivity(new Intent(this,MahasiswaDrawerActivity.class));
+        finish();
     }
 
     private void signOut(){

@@ -9,7 +9,7 @@
         android:id="@+id/rv_list_dosen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/list_mahasiswa_item"/>
+        tools:listitem="@layout/list_dosen_item"/>
 
     <ProgressBar
         android:id="@+id/pg_list_dosen"

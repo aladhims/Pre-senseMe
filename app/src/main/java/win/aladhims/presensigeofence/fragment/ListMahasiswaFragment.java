@@ -1,6 +1,7 @@
 package win.aladhims.presensigeofence.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -18,15 +19,19 @@ import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import win.aladhims.presensigeofence.DetailProfil;
 import win.aladhims.presensigeofence.Model.Mahasiswa;
 import win.aladhims.presensigeofence.R;
 import win.aladhims.presensigeofence.ViewHolder.ListMahasiswaViewHolder;
 
 
 public class ListMahasiswaFragment extends Fragment {
+
+    public static final String EXTRA_MAHASISWA_PROFIL = "MAHASISWA";
 
     private DatabaseReference mDatabaseReference;
     private FirebaseRecyclerAdapter<Mahasiswa,ListMahasiswaViewHolder> mAdapter;
@@ -64,6 +69,17 @@ public class ListMahasiswaFragment extends Fragment {
                 (Mahasiswa.class,R.layout.list_mahasiswa_item,ListMahasiswaViewHolder.class,mDatabaseReference) {
             @Override
             protected void populateViewHolder(ListMahasiswaViewHolder viewHolder, Mahasiswa model, int position) {
+                final String key = getRef(position).getKey();
+                if (!FirebaseAuth.getInstance().getCurrentUser().getUid().equals(key)) {
+                    viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(getActivity(), DetailProfil.class);
+                            i.putExtra(EXTRA_MAHASISWA_PROFIL, key);
+                            startActivity(i);
+                        }
+                    });
+                }
                 mProgressBar.setVisibility(View.GONE);
                 Glide.with(getActivity())
                         .load(model.getPhotoUrl())
@@ -79,7 +95,6 @@ public class ListMahasiswaFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         return rootView;
     }
-
 
 
     @Override

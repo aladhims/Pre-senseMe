@@ -17,6 +17,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +34,7 @@ import win.aladhims.presensigeofence.fragment.ListMahasiswaFragment;
 import win.aladhims.presensigeofence.fragment.ListNgajarFragment;
 import win.aladhims.presensigeofence.fragment.ListNgajarKuFragment;
 
-public class MahasiswaDrawerActivity extends BaseActivity {
+public class MahasiswaDrawerActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
 
 
     public static final String EXTRA_FROM_MAHASISWADRAWER = "EXTRADRAWER";
@@ -46,6 +49,7 @@ public class MahasiswaDrawerActivity extends BaseActivity {
     public static String CURRENT_TAG = TAG_LISTNGAJAR;
 
     private DatabaseReference mRootRef;
+    private GoogleApiClient mGoogleApiClient;
 
     private String[] judulActivity;
     private Handler mHandler;
@@ -67,6 +71,10 @@ public class MahasiswaDrawerActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this,this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API)
+                .build();
 
         mHandler = new Handler();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_mahasiswa_layout_main);
@@ -249,6 +257,7 @@ public class MahasiswaDrawerActivity extends BaseActivity {
         switch (item.getItemId()){
             case R.id.menu_sign_out_mahasiswa:
                 FirebaseAuth.getInstance().signOut();
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
                 startActivity(new Intent(this,SignInActivity.class));
                 finish();
                 break;
@@ -259,5 +268,10 @@ public class MahasiswaDrawerActivity extends BaseActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

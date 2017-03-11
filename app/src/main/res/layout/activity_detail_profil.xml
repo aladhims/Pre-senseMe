@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="win.aladhims.presensigeofence.DetailProfil">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ci_detail_profil"
+        android:layout_centerHorizontal="true"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/ic_action_account_circle_40"
+        android:layout_above="@+id/detail_profil_linear"
+        android:layout_marginBottom="16dp"
+        app:border_overlay="false"
+        app:border_width="4dp"
+        app:border_color="#CFD8DC"/>
+
+    <LinearLayout
+        android:id="@+id/detail_profil_linear"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_id_detail_profil"
+            android:gravity="center_vertical"
+            android:drawableStart="@drawable/contact_email"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            tools:text="50414808"/>
+
+        <TextView
+            android:id="@+id/tv_nama_detail_profil"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp"
+            android:drawableStart="@drawable/contact_nama"
+            android:textAlignment="gravity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            tools:text="NAMA"/>
+
+
+
+        <TextView
+            android:id="@+id/tv_kelas_detail_profil"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp"
+            android:drawableStart="@drawable/sks_gambar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            tools:text="3IA09"/>
+
+        <TextView
+            android:id="@+id/tv_nomor_detail_profil"
+            android:drawableStart="@drawable/contact_phone"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            tools:text="085726494433"/>
+
+        <TextView
+            android:id="@+id/tv_email_detail_profil"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:drawableStart="@drawable/contact_email"
+            android:textSize="18sp"
+            tools:text="alfiandnm@gmail.com"/>
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_chat_detail_profil"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:text="CHAT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
