@@ -16,8 +16,9 @@
             android:screenOrientation="portrait" />
         <activity android:name=".NewNgajarActivity" />
         <activity android:name=".DetailNgajarActivity" />
-        <activity android:name=".EditProfilMahasiswa"
-            android:parentActivityName=".MahasiswaDrawerActivity"/>
+        <activity
+            android:name=".EditProfilMahasiswa"
+            android:parentActivityName=".MahasiswaDrawerActivity" />
         <activity
             android:name=".SignInActivity"
             android:theme="@style/NoBarTheme">
@@ -36,7 +37,9 @@
         <activity
             android:name=".MahasiswaDrawerActivity"
             android:theme="@style/NoBarTheme" />
-        <activity android:name=".DetailProfil"></activity>
+        <activity android:name=".DetailProfil" />
+        <activity android:name=".ChatActivity"
+            android:parentActivityName=".SignInActivity"></activity>
     </application>
 
 </manifest>

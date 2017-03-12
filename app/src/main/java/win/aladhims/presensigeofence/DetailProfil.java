@@ -26,7 +26,13 @@ import win.aladhims.presensigeofence.fragment.ListMahasiswaFragment;
 
 public class DetailProfil extends BaseActivity {
 
+    public static final String USER_VIEWING_EXTRA = "THEVIEWER";
+    public static final String USER_VIEWED_EXTRA = "THEVIEWED";
+    public static final String TIPE_USER_VIEWED = "DOSEN";
+    public static final boolean ISDOSENDEFAULT = false;
+
     private String uid;
+    private boolean isDosen;
 
     private DatabaseReference rootRef,idRef;
 
@@ -51,8 +57,11 @@ public class DetailProfil extends BaseActivity {
         mTvEmail = (TextView) findViewById(R.id.tv_email_detail_profil);
         mBtnChat = (Button) findViewById(R.id.btn_chat_detail_profil);
 
+
+
         Intent i = getIntent();
         if(i.hasExtra(ListDosenFragment.EXTRA_DOSEN_PROFIL)){
+            isDosen = true;
             uid = i.getStringExtra(ListDosenFragment.EXTRA_DOSEN_PROFIL);
             idRef = rootRef.child("users").child("dosen").child(uid);
             idRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -76,6 +85,7 @@ public class DetailProfil extends BaseActivity {
                 }
             });
         }else if(i.hasExtra(ListMahasiswaFragment.EXTRA_MAHASISWA_PROFIL)){
+            isDosen = false;
             uid = i.getStringExtra(ListMahasiswaFragment.EXTRA_MAHASISWA_PROFIL);
             idRef = rootRef.child("users").child("mahasiswa").child(uid);
             idRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -98,6 +108,20 @@ public class DetailProfil extends BaseActivity {
                 }
             });
         }
+        mBtnChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toChat(getUid(),uid);
+            }
+        });
+    }
+
+    public void toChat(String viewer,String viewed){
+        Intent i = new Intent(this,ChatActivity.class);
+        i.putExtra(USER_VIEWING_EXTRA,viewer);
+        i.putExtra(USER_VIEWED_EXTRA,viewed);
+        i.putExtra(TIPE_USER_VIEWED,isDosen);
+        startActivity(i);
     }
 
     private void getBackToParent(){
