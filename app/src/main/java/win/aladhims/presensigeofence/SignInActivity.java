@@ -111,17 +111,20 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         startActivityForResult(intent,RC_SIGN_IN_GOOGLE);
     }
 
+    //user memilih sebagai dosen, ubah tipe user
     private void sebagaiDosen(){
         userType = DOSEN_TYPE;
         setLayout(userType);
 
     }
 
+    //user memilih sebagai mahasiswa, ubah tipe user
     private void sebagaiMahasiswa(){
         userType = MAHASISWA_TYPE;
         setLayout(userType);
     }
 
+    //ubah layout login sesuai dengan pilihan user
     private void setLayout(int UserType){
         switch (UserType){
             case DOSEN_TYPE:
@@ -133,6 +136,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         }
     }
 
+    //menampilkan layout login untuk dosen
     private void showLoginDosenLayout(boolean e){
         mBtnPilihUlang.setText("Bukan Dosen? Tekan disini!");
         if(e) {
@@ -150,6 +154,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         }
     }
 
+    //menampilkan layout login untuk mahasiswa
     private void showLoginMahasiswaLayout(boolean e){
         mBtnPilihUlang.setText("Bukan Mahasiswa? Tekan disini!");
         if(e) {
@@ -165,6 +170,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         }
     }
 
+    //sign in email sesuai dengan tipe user
     private void signIn(){
         showProgressDialog();
         switch (userType){
@@ -177,6 +183,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         }
     }
 
+    //sign in email plus checking data user di database untuk validasi dan workflow selanjutnya
     private void signInWithEmail(final int type){
         String email = mEtEmail.getText().toString().trim();
         String password = mEtPassword.getText().toString().trim();
@@ -238,6 +245,8 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
                     }
                 });
     }
+
+    //sign in google plus khusus user tipe mahasiswa dan checking data user di database
     private void AuthGooglePlus(final GoogleSignInAccount acc){
         AuthCredential credential = GoogleAuthProvider.getCredential(acc.getIdToken(),null);
         mFirebaseAuth.signInWithCredential(credential)
@@ -306,6 +315,7 @@ public class SignInActivity extends BaseActivity implements GoogleApiClient.OnCo
         }
         return false;
     }
+
 
     private void pilihUlangRole(){
         switch (userType){

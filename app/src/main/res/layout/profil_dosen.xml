@@ -13,6 +13,7 @@
         android:layout_width="100dp"
         android:layout_height="match_parent"
         android:layout_marginEnd="8dp"
+        android:scaleType="centerCrop"
         tools:src="@drawable/photo"/>
     <RelativeLayout
         android:layout_width="wrap_content"

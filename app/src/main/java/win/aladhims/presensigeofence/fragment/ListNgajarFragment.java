@@ -1,10 +1,12 @@
 package win.aladhims.presensigeofence.fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -37,6 +39,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
@@ -102,11 +106,12 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
             @Override
             protected void populateViewHolder(final ListNgajarViewHolder viewHolder, Ngajar model, int position) {
                 final String thisKey = getRef(position).getKey();
-                mDatabaseReference.child("ngajar").child(thisKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                mDatabaseReference.child("ngajar").child(thisKey).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        Ngajar ngajar = dataSnapshot.getValue(Ngajar.class);
+                        final String currentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        final Ngajar ngajar = dataSnapshot.getValue(Ngajar.class);
 
                         Glide.with(getActivity())
                                 .load(ngajar.getPhotoURLDosen())
@@ -120,7 +125,22 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
                         viewHolder.mTvKelas.setText(ngajar.getKelasDiajar());
                         viewHolder.mTvDurasi.setText(String.valueOf(ngajar.getDurasiNgajar()));
                         viewHolder.mTvJumlahBintang.setText(String.valueOf(ngajar.getJumlahStar()));
+                        if(ngajar.stars.containsKey(currentUid)){
+                            viewHolder.mIvBintang.setImageResource(R.drawable.ic_toggle_star_24);
+                        }else{
+                            viewHolder.mIvBintang.setImageResource(R.drawable.ic_toggle_star_outline_24);
+                        }
 
+                        viewHolder.mIvBintang.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                DatabaseReference ngajarRef = mDatabaseReference.child("ngajar").child(thisKey);
+                                DatabaseReference dosenRef = mDatabaseReference.child("dosen-ngajar").child(ngajar.getUid()).child(thisKey);
+
+                                starClicked(ngajarRef);
+                                starClicked(dosenRef);
+                            }
+                        });
                         viewHolder.mBtnIkut.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -143,58 +163,93 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
 
     }
 
+    private void starClicked(DatabaseReference ref){
+        ref.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                String curUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                Ngajar ngajar = mutableData.getValue(Ngajar.class);
+                if(ngajar == null){
+                    return Transaction.success(mutableData);
+                }
+                if(ngajar.stars.containsKey(curUid)){
+                    ngajar.jumlahStar = ngajar.jumlahStar - 1;
+                    ngajar.stars.remove(curUid);
+                }else{
+                    ngajar.jumlahStar = ngajar.jumlahStar + 1;
+                    ngajar.stars.put(curUid,true);
+                }
+
+                mutableData.setValue(ngajar);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+            }
+        });
+    }
+
     public void ikutMatkul(final String k){
         if (EasyPermissions.hasPermissions(getActivity(), perms)) {
-            final DatabaseReference mThisKeyRef = mDatabaseReference.child("ikutngajar-mahasiswa").child(k);
+            LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            mGoogleApiClient.connect();
+            if(statusOfGPS){
+                final DatabaseReference mThisKeyRef = mDatabaseReference.child("ikutngajar-mahasiswa").child(k);
+                final Location mahasiswaLoc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                if (mahasiswaLoc != null) {
+                    showDialogForFragment(getActivity());
+                    mThisKeyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            double Lat = (double) dataSnapshot.child("lat").getValue();
+                            double Long = (double) dataSnapshot.child("long").getValue();
 
-            final Location mahasiswaLoc =  LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if(mahasiswaLoc != null) {
-                showDialogForFragment(getActivity());
-                mThisKeyRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        double Lat = (double) dataSnapshot.child("lat").getValue();
-                        double Long = (double) dataSnapshot.child("long").getValue();
+                            Location loc = new Location("loc");
+                            loc.setLatitude(Lat);
+                            loc.setLongitude(Long);
+                            Float distance = mahasiswaLoc.distanceTo(loc);
 
-                        Location loc = new Location("loc");
-                        loc.setLatitude(Lat);
-                        loc.setLongitude(Long);
-                        Float distance = mahasiswaLoc.distanceTo(loc);
-
-                        if (distance <= 20) {
-                            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            MahasiswaPresent mp = new MahasiswaPresent(uid);
-                            mThisKeyRef.child("mahasiswa").child(uid).setValue(mp)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            hideDialogForFragment();
-                                            if (task.isSuccessful()) {
-                                                Snackbar.make(rootView, "Berhasil ikut kelas", Snackbar.LENGTH_LONG).show();
+                            if (distance <= 40) {
+                                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                MahasiswaPresent mp = new MahasiswaPresent(uid);
+                                mThisKeyRef.child("mahasiswa").child(uid).setValue(mp)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                hideDialogForFragment();
+                                                if (task.isSuccessful()) {
+                                                    Snackbar.make(rootView, "Berhasil ikut kelas", Snackbar.LENGTH_LONG).show();
                                                 /*Intent i = new Intent(getActivity(), DetailNgajarActivity.class);
                                                 i.putExtra(EXTRA_FROM_LISTNGAJAR, k);
                                                 startActivity(i);
                                                 getActivity().finish();*/
-                                            } else {
-                                                Snackbar.make(rootView, "Gagal ikut kelas", Snackbar.LENGTH_LONG).show();
+                                                } else {
+                                                    Snackbar.make(rootView, "Gagal ikut kelas", Snackbar.LENGTH_LONG).show();
+                                                }
                                             }
-                                        }
-                                    });
+                                        });
 
 
-                        } else if (distance > 20) {
-                            hideDialogForFragment();
-                            Snackbar.make(rootView, "Jarak terlalu jauh dari pengajar!", Snackbar.LENGTH_LONG).show();
+                            } else {
+                                hideDialogForFragment();
+                                Snackbar.make(rootView, "Jarak terlalu jauh dari pengajar!", Snackbar.LENGTH_LONG).show();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
-            }else{
-                Toast.makeText(getActivity(), "Lokasi tidak ada/error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(getActivity(), "Lokasi tidak ada/error", Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                showDialogForFragment(getActivity());
+                startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS),13);
             }
         }else{
             EasyPermissions.requestPermissions(getActivity(),"Minta Ijin",RC_PERMS_FINELOC,perms);
@@ -221,15 +276,27 @@ public class ListNgajarFragment extends Fragment implements GoogleApiClient.OnCo
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 13){
+            hideDialogForFragment();
+        }
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mGoogleApiClient.disconnect();
+    public void onResume() {
+        super.onResume();
+        if(mGoogleApiClient != null){
+            mGoogleApiClient.connect();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mGoogleApiClient.isConnected()){
+            mGoogleApiClient.disconnect();
+        }
     }
 
     @Override

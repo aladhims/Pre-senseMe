@@ -21,6 +21,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 import win.aladhims.presensigeofence.Model.Dosen;
 import win.aladhims.presensigeofence.Model.Ngajar;
 import win.aladhims.presensigeofence.fragment.ListNgajarKuFragment;
@@ -132,9 +136,13 @@ public class NewNgajarActivity extends BaseActivity implements View.OnClickListe
                     key = keyBawaan;
                 }
 
-                Ngajar n = new Ngajar(dosen.getPhotoUrl(),dosen.getNama(),dosen.getEmail(),dosen.getNIP(),dosen.getNohape(),0,namaMatkul,mJumlahSKS,mHari,mJamMulai,mMenitMulai,kelas,mDurasi);
-                rootRef.child("dosen-ngajar").child(getUid()).child(key).setValue(n);
-                rootRef.child("ngajar").child(key).setValue(n);
+
+                Ngajar n = new Ngajar(getUid(),dosen.getPhotoUrl(),dosen.getNama(),dosen.getEmail(),dosen.getNIP(),dosen.getNohape(),namaMatkul,mJumlahSKS,mHari,mJamMulai,mMenitMulai,kelas,mDurasi);
+                Map<String, Object> ngajar = n.toMap();
+                Map<String, Object> updateNgajar = new HashMap<>();
+                updateNgajar.put("/dosen-ngajar/" + getUid() + "/" + key, ngajar);
+                updateNgajar.put("/ngajar/" + key, ngajar);
+                rootRef.updateChildren(updateNgajar);
                 hideProgressDialog();
                 finish();
             }

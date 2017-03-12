@@ -2,7 +2,10 @@ package win.aladhims.presensigeofence;
 
 import android.*;
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -57,7 +60,7 @@ public class DetailNgajarActivity extends BaseActivity
         implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,EasyPermissions.PermissionCallbacks {
 
     private static final String TAG = DetailNgajarActivity.class.getSimpleName();
-    private static final int RC_PERMS_FINELOC = 123123;
+    private static final int RC_PERMS_FINELOC = 15;
     String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
 
     private int mDurasiSisa;
@@ -178,39 +181,47 @@ public class DetailNgajarActivity extends BaseActivity
 
     private void mulaiNgajar(){
         if (EasyPermissions.hasPermissions(this, perms)) {
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if (mLastLocation != null) {
-                showProgressDialog();
+            LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if(statusOfGPS) {
+                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                if (mLastLocation != null) {
+                    showProgressDialog();
 
-                Map<String ,Object> locHash = new HashMap<>();
-                locHash.put("lat",mLastLocation.getLatitude());
-                locHash.put("long",mLastLocation.getLongitude());
-                mNgajarRef.updateChildren(locHash).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        hideProgressDialog();
-                        if(task.isSuccessful()){
-                            Toast.makeText(getApplicationContext(),"Berhasil memulai pelajaran!",Toast.LENGTH_LONG).show();
-                            mBtnMulai.setEnabled(false);
-                            mBtnMulai.setVisibility(View.GONE);
-                            Long countLong = TimeUnit.MINUTES.toMillis(mDurasiSisa);
-                            CountDownTimer countDownTimer = new CountDownTimer(countLong, 1000) {
-                                @Override
-                                public void onTick(long millisUntilFinished) {
-                                    mTvDurasi.setText(String.format("%d", TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
-                                }
+                    Map<String, Object> locHash = new HashMap<>();
+                    locHash.put("lat", mLastLocation.getLatitude());
+                    locHash.put("long", mLastLocation.getLongitude());
+                    mNgajarRef.updateChildren(locHash).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            hideProgressDialog();
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "Berhasil memulai pelajaran!", Toast.LENGTH_LONG).show();
+                                mBtnMulai.setEnabled(false);
+                                mBtnMulai.setVisibility(View.GONE);
+                                Long countLong = TimeUnit.MINUTES.toMillis(mDurasiSisa);
+                                CountDownTimer countDownTimer = new CountDownTimer(countLong, 1000) {
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+                                        mTvDurasi.setText(String.format("%d", TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+                                    }
 
-                                @Override
-                                public void onFinish() {
-                                    finish();
-                                }
-                            };
-                            countDownTimer.start();
-                        }else{
-                            Toast.makeText(getApplicationContext(),"ada kesalahan memasukan data ke database",Toast.LENGTH_SHORT).show();
+                                    @Override
+                                    public void onFinish() {
+                                        finish();
+                                    }
+                                };
+                                countDownTimer.start();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "ada kesalahan memasukan data ke database", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    Toast.makeText(this, "gagal mendapatkan lokasi anda", Toast.LENGTH_LONG).show();
+                }
+            }else {
+                startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             }
         }else {
             EasyPermissions.requestPermissions(this,"Minta Ijin",RC_PERMS_FINELOC,perms);
@@ -218,15 +229,19 @@ public class DetailNgajarActivity extends BaseActivity
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mGoogleApiClient.connect();
+    public void onResume() {
+        super.onResume();
+        if(mGoogleApiClient != null){
+            mGoogleApiClient.connect();
+        }
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        mGoogleApiClient.disconnect();
+    public void onPause() {
+        super.onPause();
+        if(mGoogleApiClient.isConnected()){
+            mGoogleApiClient.disconnect();
+        }
     }
 
     @Override

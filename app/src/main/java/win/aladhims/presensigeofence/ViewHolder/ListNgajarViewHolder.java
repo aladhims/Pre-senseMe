@@ -25,7 +25,7 @@ public class ListNgajarViewHolder extends RecyclerView.ViewHolder {
         mTvNamaDosen = (TextView) itemView.findViewById(R.id.tv_nama_pengajar);
         mTvEmailDosen = (TextView) itemView.findViewById(R.id.tv_email_dosen);
         mTvKontakDosen = (TextView) itemView.findViewById(R.id.tv_kontak_dosen);
-        mTvJumlahBintang = (TextView) itemView.findViewById(R.id.post_num_stars);
+        mTvJumlahBintang = (TextView) itemView.findViewById(R.id.num_stars_list_ngajar);
         mTvNamaMatkul = (TextView) itemView.findViewById(R.id.tv_nama_matkul);
         mTvWaktuMulai = (TextView) itemView.findViewById(R.id.tv_jadwal_ngajar);
         mTvKelas = (TextView) itemView.findViewById(R.id.tv_kelas);
@@ -33,6 +33,6 @@ public class ListNgajarViewHolder extends RecyclerView.ViewHolder {
 
         mBtnIkut = (Button) itemView.findViewById(R.id.btn_ikuti_ngajar);
         mIvFotoDosen = (ImageView) itemView.findViewById(R.id.foto_pengajar);
-        mIvBintang = (ImageView) itemView.findViewById(R.id.star);
+        mIvBintang = (ImageView) itemView.findViewById(R.id.star_list_ngajar);
     }
 }

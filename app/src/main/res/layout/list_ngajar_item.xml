@@ -29,7 +29,7 @@
                 android:padding="10dp">
 
                 <ImageView
-                    android:id="@+id/star"
+                    android:id="@+id/star_list_ngajar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -38,7 +38,7 @@
                     android:background="?attr/selectableItemBackground" />
 
                 <TextView
-                    android:id="@+id/post_num_stars"
+                    android:id="@+id/num_stars_list_ngajar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -61,6 +61,7 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:textSize="22sp"
+                    android:layout_marginBottom="8dp"
                     tools:text="Algoritma dan Pemrograman 3"/>
 
                 <LinearLayout

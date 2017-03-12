@@ -16,16 +16,18 @@
         android:background="@color/colorPrimaryDark" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:orientation="vertical"
+        android:layout_marginTop="16dp"
         android:padding="@dimen/activity_horizontal_margin">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ci_drawer_header_foto"
             android:layout_width="75dp"
-            android:layout_height="75dp" />
+            android:layout_height="75dp"
+            android:layout_marginBottom="8dp"/>
 
         <TextView
             android:id="@+id/tv_drawer_header_name"
@@ -35,7 +37,7 @@
 
         <TextView
             android:id="@+id/tv_drawer_header_id"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </LinearLayout>

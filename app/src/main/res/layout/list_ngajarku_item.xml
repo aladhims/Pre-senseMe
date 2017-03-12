@@ -49,7 +49,7 @@
                         android:background="?attr/selectableItemBackground" />
 
                     <TextView
-                        android:id="@+id/post_num_stars_list_ngajarku"
+                        android:id="@+id/num_stars_list_ngajarku"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
