@@ -4,8 +4,8 @@ An android app that helps college activity to track presence record and the dura
 Sliding Welcome
 <br>
 <br>
-<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/firstslidewelcome.png" width="150" height="250" alt="firstSlide">  
-<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/thirdslidewelcome.png" width="150" height="250" alt="firstSlide">  
+<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/firstslidewelcome.png" width="150" height="250" alt="firstSlide" margin-right="10px">
+<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/thirdslidewelcome.png" width="150" height="250" alt="firstSlide">
 <br>
 <br>
 <br>
@@ -13,8 +13,8 @@ Sliding Welcome
 Login Chooser, Login Dosen, Login Mahasiwa
 <br>
 <br>
-<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/loginchooser.png" width="150" height="250" alt="firstSlide">  
-<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/dosenlogin.png" width="150" height="250" alt="firstSlide">  
+<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/loginchooser.png" width="150" height="250" alt="firstSlide">
+<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/dosenlogin.png" width="150" height="250" alt="firstSlide">
 <img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/mahasiswalogin.png" width="150" height="250" alt="firstSlide">
 <br>
 <br>
@@ -23,9 +23,9 @@ Login Chooser, Login Dosen, Login Mahasiwa
 Drawer, Detail Profile(Dosen/Mahasiswa), EditProfile(Dosen/Mahasiswa)
 <br>
 <br>
-<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/drawer.png" width="150" height="250" alt="firstSlide">  
-<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/detailprofile.png" width="150" height="250" alt="firstSlide">  
-<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/editprofile.png" width="150" height="250" alt="firstSlide">  
+<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/drawer.png" width="150" height="250" alt="firstSlide">
+<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/detailprofile.png" width="150" height="250" alt="firstSlide">
+<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/editprofile.png" width="150" height="250" alt="firstSlide">
 <br>
 <br>
 <br>
