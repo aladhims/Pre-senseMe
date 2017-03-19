@@ -52,5 +52,7 @@ Chat, Create Ngajar, Detail Ngajar
 <br>
 <br>
 <img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/chat.png" width="150" height="250" alt="firstSlide">
+<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/bikinngajar.png" width="150" height="250" alt="firstSlide">
+<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/detailNgajar.png" width="150" height="250" alt="firstSlide">
 
 
