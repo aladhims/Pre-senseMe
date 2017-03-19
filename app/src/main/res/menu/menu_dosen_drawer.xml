@@ -15,11 +15,6 @@
             android:icon="@drawable/date_gambar"
             android:title="List Dosen" />
 
-        <item
-            android:id="@+id/menu_drawer_timeline"
-            android:icon="@drawable/time_gambar"
-            android:title="Timeline"/>
-
     </group>
 
     <item android:title="Other">

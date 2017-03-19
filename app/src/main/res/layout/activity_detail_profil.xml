@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="win.aladhims.presensigeofence.DetailProfil">
+    tools:context="win.aladhims.PresenseMe.DetailProfil">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ci_detail_profil"

@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:104699768852:android:14d1e0e0b2e41acd",
+        "mobilesdk_app_id": "1:104699768852:android:6c1e8e545679ba54",
         "android_client_info": {
-          "package_name": "win.aladhims.presensigeofence"
+          "package_name": "win.aladhims.PresenseMe"
         }
       },
       "oauth_client": [
         {
-          "client_id": "104699768852-v647pihjl17l359l4g3e2d049mfht8ed.apps.googleusercontent.com",
+          "client_id": "104699768852-tc5h7fiq7rg7727es4457e3jiq2ugk6v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "win.aladhims.presensigeofence",
+            "package_name": "win.aladhims.PresenseMe",
             "certificate_hash": "1ca4ffcf4c9c15d85d7b51fd48e53890ac6c55f7"
           }
         },

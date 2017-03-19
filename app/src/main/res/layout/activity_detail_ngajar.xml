@@ -4,7 +4,7 @@
     android:id="@+id/activity_mulai_ngajar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="win.aladhims.presensigeofence.DetailNgajarActivity">
+    tools:context="win.aladhims.PresenseMe.DetailNgajarActivity">
 
     <LinearLayout
         android:id="@+id/layout_info_ngajar"
