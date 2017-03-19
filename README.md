@@ -3,4 +3,15 @@ An android app that helps college activity to track presence record and the dura
 
 Sliding Welcome
 <br>
-<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/firstslidewelcome.png" width="150" height="200" alt="firstSlide">
+<br>
+<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/firstslidewelcome.png" width="175" height="250" alt="firstSlide">
+<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/thirdslidewelcome.png" width="175" height="250" alt="firstSlide">
+
+Login Chooser, Login Dosen, Login Mahasiwa
+<br>
+<br>
+<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/loginchooser.png" width="175" height="250" alt="firstSlide">
+
+<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/dosenlogin.png" width="175" height="250" alt="firstSlide">
+
+<img src="https://github.com/aladhims/Pre-senseMe/blob/master/screenshots/mahasiswalogin.png" width="175" height="250" alt="firstSlide">
